@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuestionario · Banana Creative 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow: #FF4AB1;
+      --yellow-light: #FFF8DC;
+      --black: #0A0A0A;
+      --gray-900: #111111;
+      --gray-700: #2a2a2a;
+      --gray-500: #555555;
+      --gray-300: #cccccc;
+      --gray-100: #f5f5f5;
+      --white: #ffffff;
+      --red: #e53e3e;
+      --green: #38a169;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--gray-900);
+      border-bottom: 1px solid var(--gray-700);
+    }
+    .progress-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .progress-logo {
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: var(--yellow);
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .progress-bar-track {
+      flex: 1;
+      height: 4px;
+      background: var(--gray-700);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--yellow);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .progress-label {
+      font-size: 12px;
+      color: var(--gray-300);
+      white-space: nowrap;
+    }
+
+    /* ─── LAYOUT ─── */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 100px 24px 80px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      text-align: center;
+      padding: 48px 0 56px;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--black);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 99px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--yellow); }
+    .hero p {
+      font-size: 16px;
+      color: var(--gray-300);
+      max-width: 500px;
+      margin: 0 auto 12px;
+    }
+    .hero-meta {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--gray-700);
+      margin: 0 0 48px;
+    }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      margin-bottom: 56px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .section-number {
+      width: 36px; height: 36px;
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 14px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    /* ─── QUESTION ─── */
+    .question {
+      margin-bottom: 36px;
+    }
+    .question-label {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--white);
+      line-height: 1.4;
+    }
+    .question-label .q-num {
+      color: var(--yellow);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .question-sub {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: -8px;
+      margin-bottom: 14px;
+    }
+
+    /* ─── RADIO / CHECKBOX OPTIONS ─── */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .option-item:hover {
+      border-color: var(--yellow);
+      background: rgba(245, 200, 66, 0.05);
+    }
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border: 2px solid var(--gray-500);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all 0.15s;
+      cursor: pointer;
+      position: relative;
+    }
+    .option-item input[type="checkbox"] {
+      border-radius: 5px;
+    }
+    .option-item input[type="radio"]:checked,
+    .option-item input[type="checkbox"]:checked {
+      background: var(--yellow);
+      border-color: var(--yellow);
+    }
+    .option-item input[type="radio"]:checked::after {
+      content: '';
+      position: absolute;
+      width: 6px; height: 6px;
+      background: var(--black);
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .option-item input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--black);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .option-item.selected {
+      border-color: var(--yellow);
+      background: rgba(245, 200, 66, 0.07);
+    }
+    .option-text {
+      font-size: 14px;
+      color: var(--gray-300);
+      line-height: 1.4;
+    }
+
+    /* ─── TEXT INPUTS ─── */
+    .text-input {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--gray-700);
+      border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius-sm);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .text-input::placeholder { color: var(--gray-500); }
+    .text-input:focus { border-color: var(--yellow); }
+
+    /* ─── RANKING (P5) ─── */
+    .ranking-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ranking-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--gray-900);
+      border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius-sm);
+    }
+    .ranking-label { font-size: 14px; color: var(--gray-300); flex: 1; }
+    .ranking-select {
+      width: 70px;
+      padding: 7px 10px;
+      background: var(--gray-700);
+      border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius-sm);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    .ranking-select:focus { border-color: var(--yellow); }
+    .ranking-select option { background: var(--gray-700); }
+
+    /* ─── CONDITIONAL FIELDS ─── */
+    .conditional { display: none; margin-top: 8px; }
+    .conditional.visible { display: block; }
+    .otro-input-wrap { padding: 4px 0 0; }
+
+    /* ─── SECTION DIVIDER ─── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--gray-700);
+      margin: 0 0 56px;
+    }
+
+    /* ─── CONCEPT BOX ─── */
+    .concept-box {
+      background: var(--gray-900);
+      border: 1.5px solid var(--gray-700);
+      border-left: 4px solid var(--yellow);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .concept-box p {
+      font-size: 14px;
+      color: var(--gray-300);
+      line-height: 1.7;
+    }
+
+    /* ─── CONTACT SECTION ─── */
+    .contact-box {
+      background: var(--gray-900);
+      border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 12px;
+    }
+    .contact-box .contact-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .contact-box label {
+      font-size: 13px;
+      color: var(--gray-300);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    /* ─── SUBMIT BUTTON ─── */
+    .submit-wrap {
+      margin-top: 48px;
+      text-align: center;
+    }
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 48px;
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .btn-submit:hover { transform: translateY(-2px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-submit .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid var(--black);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { display: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── ERROR MESSAGE ─── */
+    .form-error {
+      background: rgba(229, 62, 62, 0.1);
+      border: 1px solid var(--red);
+      color: #fc8181;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      margin-top: 16px;
+      display: none;
+    }
+    .field-error { color: var(--red); font-size: 12px; margin-top: 6px; display: none; }
+
+    /* ─── SUCCESS SCREEN ─── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 80px 0;
+    }
+    .success-screen .check-icon {
+      width: 72px; height: 72px;
+      background: var(--yellow);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 24px;
+    }
+    .success-screen h2 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .success-screen p {
+      font-size: 15px;
+      color: var(--gray-300);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ─── FOOTER ─── */
+    .form-footer {
+      text-align: center;
+      padding: 24px 0 48px;
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    .form-footer a { color: var(--yellow); text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 480px) {
+      .container { padding: 90px 16px 60px; }
+      .hero h1 { font-size: 26px; }
+      .ranking-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .ranking-select { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-wrap">
+    <div class="progress-inner">
+      <svg width="80" height="6" viewBox="0 0 1398 89" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M0 87.0559V2.15393H51.2525C56.9513 2.15393 61.8636 3.00563 66.0257 4.68468C70.1758 6.37591 73.3821 8.74849 75.6568 11.8024C77.9193 14.8564 79.0567 18.4822 79.0567 22.692C79.0567 25.9041 78.3791 28.885 77.024 31.5983C75.6689 34.3237 73.7935 36.5868 71.3736 38.3997C68.9538 40.2126 66.2072 41.5753 63.1219 42.4878V42.9867C66.5944 43.6437 69.7281 44.8482 72.5352 46.576C75.3301 48.3037 77.5806 50.6033 79.2623 53.4504C80.9441 56.2975 81.7911 59.7894 81.7911 63.9141C81.7911 69.4379 80.436 73.9032 77.7378 77.2857C75.0397 80.6681 71.4099 83.1502 66.8727 84.7076C62.3355 86.2772 57.1207 87.0559 51.2404 87.0559H0ZM13.7569 38.5335H48.6512C51.9301 38.5335 54.7855 37.9738 57.1933 36.8666C59.601 35.7473 61.5127 34.1899 62.9162 32.158C64.3197 30.1382 65.0215 27.8508 65.0215 25.2836C65.0215 20.8304 63.618 17.5453 60.8231 15.4404C58.0281 13.3355 54.3136 12.2891 49.6796 12.2891H13.7569V38.5335ZM13.7569 76.8963H51.1194C56.0438 76.8963 60.0487 75.8013 63.134 73.6112C66.2193 71.4211 67.768 67.771 67.768 62.6608C67.768 59.5217 67.0905 56.9058 65.7354 54.8009C64.3802 52.696 62.4081 51.1264 59.7946 50.0922C57.1933 49.058 53.9023 48.547 49.9458 48.547H13.7569V76.8842V76.8963Z" fill="white"/><path d="M89.6295 87.0559L128.867 2.15393H146.968L186.351 87.0559H171.433L161.729 66.019H113.368L103.81 87.0559H89.6174H89.6295ZM117.869 55.9933H157.107L145.093 29.3839C144.802 28.6417 144.367 27.6075 143.786 26.2934C143.205 24.9794 142.576 23.5072 141.898 21.9011C141.221 20.2951 140.543 18.6403 139.866 16.9491C139.188 15.2579 138.559 13.7127 137.978 12.3134H137.107C136.429 13.9682 135.655 15.8662 134.796 18.0076C133.925 20.1491 133.054 22.2418 132.195 24.2615C131.324 26.2813 130.598 27.9968 130.029 29.396L117.869 56.0054V55.9933Z" fill="white"/><path d="M199.805 87.0559V2.15393H213.126L261.342 58.0982C261.826 58.597 262.455 59.3392 263.229 60.3248C264.003 61.3103 264.778 62.2837 265.54 63.2327C266.314 64.1817 266.944 65.0334 267.428 65.7756H268.008V2.15393H281.475V87.0559H268.879L220.083 30.1261C219.406 29.2135 218.413 27.936 217.119 26.2934C215.812 24.6387 214.735 23.3247 213.864 22.3391H213.138V87.068H199.817L199.805 87.0559Z" fill="white"/><path d="M294.941 87.0559L334.179 2.15393H352.279L391.662 87.0559H376.744L367.04 66.019H318.68L309.121 87.0559H294.929H294.941ZM323.181 55.9933H362.419L350.404 29.3839C350.114 28.6417 349.678 27.6075 349.097 26.2934C348.516 24.9794 347.887 23.5072 347.21 21.9011C346.532 20.2951 345.855 18.6403 345.177 16.9491C344.5 15.2579 343.87 13.7127 343.29 12.3134H342.418C341.741 13.9682 340.967 15.8662 340.107 18.0076C339.236 20.1491 338.365 22.2418 337.506 24.2615C336.635 26.2813 335.909 27.9968 335.34 29.396L323.181 56.0054V55.9933Z" fill="white"/><path d="M405.12 87.0559V2.15393H418.441L466.657 58.0982C467.141 58.597 467.77 59.3392 468.544 60.3248C469.319 61.3103 470.093 62.2837 470.855 63.2327C471.63 64.1817 472.259 65.0334 472.743 65.7756H473.324V2.15393H486.79V87.0559H474.195L425.398 30.1261C424.721 29.2135 423.729 27.936 422.434 26.2934C421.127 24.6387 420.051 23.3247 419.179 22.3391H418.453V87.068H405.132L405.12 87.0559Z" fill="white"/><path d="M500.256 87.0559L539.494 2.15393H557.595L596.978 87.0559H582.059L572.356 66.019H523.995L514.437 87.0559H500.244H500.256ZM528.496 55.9933H567.734L555.719 29.3839C555.429 28.6417 554.993 27.6075 554.413 26.2934C553.832 24.9794 553.203 23.5072 552.525 21.9011C551.848 20.2951 551.17 18.6403 550.492 16.9491C549.815 15.2579 549.186 13.7127 548.605 12.3134H547.734C547.056 13.9682 546.282 15.8662 545.423 18.0076C544.552 20.1491 543.681 22.2418 542.821 24.2615C541.95 26.2813 541.224 27.9968 540.656 29.396L528.496 56.0054V55.9933Z" fill="white"/><path d="M652.861 88.5399C641.512 88.5399 631.99 86.8852 624.27 83.5635C616.563 80.2541 610.743 75.2899 606.811 68.7075C602.879 62.113 600.919 53.9732 600.919 44.276C600.919 29.6877 605.311 18.6643 614.083 11.1937C622.855 3.73529 635.777 0 652.849 0C662.54 0 671.01 1.38705 678.233 4.16114C685.456 6.93524 691.058 11.0599 695.039 16.5351C699.02 22.0103 701.004 28.7265 701.004 36.6838H670.308C670.308 33.3743 669.63 30.5029 668.275 28.106C666.92 25.6969 664.948 23.8353 662.383 22.5091C659.818 21.1829 656.587 20.5137 652.716 20.5137C648.154 20.5137 644.5 21.3411 641.729 22.9958C638.971 24.6505 636.95 26.9744 635.692 29.9554C634.434 32.9363 633.804 36.3796 633.804 40.2731V48.2303C633.804 52.1238 634.458 55.5671 635.765 58.548C637.071 61.5289 639.08 63.8529 641.802 65.5076C644.512 67.1623 648.057 67.9897 652.425 67.9897C656.793 67.9897 660.205 67.3692 662.976 66.1281C665.747 64.8871 667.828 63.0863 669.231 60.7138C670.635 58.3412 671.336 55.5549 671.336 52.3185H701.016C701.016 60.1176 699.128 66.7 695.341 72.09C691.554 77.48 686.073 81.5681 678.898 84.3422C671.724 87.1163 663.036 88.5034 652.861 88.5034V88.5399Z" fill="white"/><path d="M718.334 87.044V1.49719H781.032C788.497 1.49719 794.728 2.7869 799.725 5.35416C804.722 7.92141 808.473 11.2795 811.002 15.4285C813.519 19.5775 814.789 24.055 814.789 28.861C814.789 34.3362 813.289 39.203 810.276 43.4736C807.263 47.7443 803.198 51.1632 798.056 53.7305L817.693 87.0561H781.613L766.332 58.3297H750.469V87.0561H718.322L718.334 87.044ZM750.481 39.2882H773.034C775.551 39.2882 777.693 38.4365 779.435 36.7331C781.177 35.0297 782.048 32.7788 782.048 29.956C782.048 28.2161 781.661 26.6831 780.887 25.3568C780.113 24.0306 779.048 22.9721 777.681 22.1812C776.326 21.3904 774.777 21.001 773.022 21.001H750.469V39.276L750.481 39.2882Z" fill="white"/><path d="M831.956 87.044V1.49719H918.515V22.0109H864.104V33.8251H910.662V53.475H864.104V66.5303H919.531V87.044H831.956Z" fill="white"/><path d="M927.237 87.044L963.753 1.49719H1001.14L1037.66 87.044H1003.61L999.385 74.9864H964.322L960.099 87.044H927.225H927.237ZM971.025 55.8354H992.852L988.048 42.1596C987.661 41.1619 987.226 39.9695 986.742 38.5581C986.258 37.1468 985.774 35.6624 985.29 34.0806C984.806 32.5111 984.322 30.9537 983.838 29.4207C983.354 27.8876 982.918 26.5371 982.531 25.3812H981.37C980.982 26.8777 980.474 28.569 979.845 30.4792C979.216 32.3894 978.563 34.3605 977.885 36.3802C977.207 38.4121 976.53 40.3345 975.852 42.1596L971.049 55.8354H971.025Z" fill="white"/><path d="M1063.55 87.044V23.3736H1030.67V1.49719H1128.44V23.3736H1095.71V87.044H1063.56H1063.55Z" fill="white"/><path d="M1143.12 87.044V1.49719H1175.27V87.044H1143.12Z" fill="white"/><path d="M1224.01 87.0434L1188.51 1.49666H1222.85L1236.67 41.0397C1237.05 42.1226 1237.59 43.6921 1238.26 45.7605C1238.94 47.8289 1239.69 50.0312 1240.51 52.3551C1241.34 54.679 1242.04 56.7961 1242.62 58.6941H1243.78C1244.36 56.9542 1245.04 54.9588 1245.81 52.7201C1246.59 50.4814 1247.34 48.3034 1248.06 46.1864C1248.79 44.0693 1249.35 42.3537 1249.73 41.0275L1263.7 1.4845H1296.57L1261.22 87.0313H1223.97L1224.01 87.0434Z" fill="white"/><path d="M1310.43 87.044V1.49719H1396.98V22.0109H1342.57V33.8251H1389.13V53.475H1342.57V66.5303H1398V87.044H1310.43Z" fill="white"/></svg>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <span class="progress-label" id="progressLabel">0 / 21</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+      <svg width="160" height="10" viewBox="0 0 1398 89" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:24px;display:block;margin-left:auto;margin-right:auto"><path d="M0 87.0559V2.15393H51.2525C56.9513 2.15393 61.8636 3.00563 66.0257 4.68468C70.1758 6.37591 73.3821 8.74849 75.6568 11.8024C77.9193 14.8564 79.0567 18.4822 79.0567 22.692C79.0567 25.9041 78.3791 28.885 77.024 31.5983C75.6689 34.3237 73.7935 36.5868 71.3736 38.3997C68.9538 40.2126 66.2072 41.5753 63.1219 42.4878V42.9867C66.5944 43.6437 69.7281 44.8482 72.5352 46.576C75.3301 48.3037 77.5806 50.6033 79.2623 53.4504C80.9441 56.2975 81.7911 59.7894 81.7911 63.9141C81.7911 69.4379 80.436 73.9032 77.7378 77.2857C75.0397 80.6681 71.4099 83.1502 66.8727 84.7076C62.3355 86.2772 57.1207 87.0559 51.2404 87.0559H0ZM13.7569 38.5335H48.6512C51.9301 38.5335 54.7855 37.9738 57.1933 36.8666C59.601 35.7473 61.5127 34.1899 62.9162 32.158C64.3197 30.1382 65.0215 27.8508 65.0215 25.2836C65.0215 20.8304 63.618 17.5453 60.8231 15.4404C58.0281 13.3355 54.3136 12.2891 49.6796 12.2891H13.7569V38.5335ZM13.7569 76.8963H51.1194C56.0438 76.8963 60.0487 75.8013 63.134 73.6112C66.2193 71.4211 67.768 67.771 67.768 62.6608C67.768 59.5217 67.0905 56.9058 65.7354 54.8009C64.3802 52.696 62.4081 51.1264 59.7946 50.0922C57.1933 49.058 53.9023 48.547 49.9458 48.547H13.7569V76.8842V76.8963Z" fill="white"/><path d="M89.6295 87.0559L128.867 2.15393H146.968L186.351 87.0559H171.433L161.729 66.019H113.368L103.81 87.0559H89.6174H89.6295ZM117.869 55.9933H157.107L145.093 29.3839C144.802 28.6417 144.367 27.6075 143.786 26.2934C143.205 24.9794 142.576 23.5072 141.898 21.9011C141.221 20.2951 140.543 18.6403 139.866 16.9491C139.188 15.2579 138.559 13.7127 137.978 12.3134H137.107C136.429 13.9682 135.655 15.8662 134.796 18.0076C133.925 20.1491 133.054 22.2418 132.195 24.2615C131.324 26.2813 130.598 27.9968 130.029 29.396L117.869 56.0054V55.9933Z" fill="white"/><path d="M199.805 87.0559V2.15393H213.126L261.342 58.0982C261.826 58.597 262.455 59.3392 263.229 60.3248C264.003 61.3103 264.778 62.2837 265.54 63.2327C266.314 64.1817 266.944 65.0334 267.428 65.7756H268.008V2.15393H281.475V87.0559H268.879L220.083 30.1261C219.406 29.2135 218.413 27.936 217.119 26.2934C215.812 24.6387 214.735 23.3247 213.864 22.3391H213.138V87.068H199.817L199.805 87.0559Z" fill="white"/><path d="M294.941 87.0559L334.179 2.15393H352.279L391.662 87.0559H376.744L367.04 66.019H318.68L309.121 87.0559H294.929H294.941ZM323.181 55.9933H362.419L350.404 29.3839C350.114 28.6417 349.678 27.6075 349.097 26.2934C348.516 24.9794 347.887 23.5072 347.21 21.9011C346.532 20.2951 345.855 18.6403 345.177 16.9491C344.5 15.2579 343.87 13.7127 343.29 12.3134H342.418C341.741 13.9682 340.967 15.8662 340.107 18.0076C339.236 20.1491 338.365 22.2418 337.506 24.2615C336.635 26.2813 335.909 27.9968 335.34 29.396L323.181 56.0054V55.9933Z" fill="white"/><path d="M405.12 87.0559V2.15393H418.441L466.657 58.0982C467.141 58.597 467.77 59.3392 468.544 60.3248C469.319 61.3103 470.093 62.2837 470.855 63.2327C471.63 64.1817 472.259 65.0334 472.743 65.7756H473.324V2.15393H486.79V87.0559H474.195L425.398 30.1261C424.721 29.2135 423.729 27.936 422.434 26.2934C421.127 24.6387 420.051 23.3247 419.179 22.3391H418.453V87.068H405.132L405.12 87.0559Z" fill="white"/><path d="M500.256 87.0559L539.494 2.15393H557.595L596.978 87.0559H582.059L572.356 66.019H523.995L514.437 87.0559H500.244H500.256ZM528.496 55.9933H567.734L555.719 29.3839C555.429 28.6417 554.993 27.6075 554.413 26.2934C553.832 24.9794 553.203 23.5072 552.525 21.9011C551.848 20.2951 551.17 18.6403 550.492 16.9491C549.815 15.2579 549.186 13.7127 548.605 12.3134H547.734C547.056 13.9682 546.282 15.8662 545.423 18.0076C544.552 20.1491 543.681 22.2418 542.821 24.2615C541.95 26.2813 541.224 27.9968 540.656 29.396L528.496 56.0054V55.9933Z" fill="white"/><path d="M652.861 88.5399C641.512 88.5399 631.99 86.8852 624.27 83.5635C616.563 80.2541 610.743 75.2899 606.811 68.7075C602.879 62.113 600.919 53.9732 600.919 44.276C600.919 29.6877 605.311 18.6643 614.083 11.1937C622.855 3.73529 635.777 0 652.849 0C662.54 0 671.01 1.38705 678.233 4.16114C685.456 6.93524 691.058 11.0599 695.039 16.5351C699.02 22.0103 701.004 28.7265 701.004 36.6838H670.308C670.308 33.3743 669.63 30.5029 668.275 28.106C666.92 25.6969 664.948 23.8353 662.383 22.5091C659.818 21.1829 656.587 20.5137 652.716 20.5137C648.154 20.5137 644.5 21.3411 641.729 22.9958C638.971 24.6505 636.95 26.9744 635.692 29.9554C634.434 32.9363 633.804 36.3796 633.804 40.2731V48.2303C633.804 52.1238 634.458 55.5671 635.765 58.548C637.071 61.5289 639.08 63.8529 641.802 65.5076C644.512 67.1623 648.057 67.9897 652.425 67.9897C656.793 67.9897 660.205 67.3692 662.976 66.1281C665.747 64.8871 667.828 63.0863 669.231 60.7138C670.635 58.3412 671.336 55.5549 671.336 52.3185H701.016C701.016 60.1176 699.128 66.7 695.341 72.09C691.554 77.48 686.073 81.5681 678.898 84.3422C671.724 87.1163 663.036 88.5034 652.861 88.5034V88.5399Z" fill="white"/><path d="M718.334 87.044V1.49719H781.032C788.497 1.49719 794.728 2.7869 799.725 5.35416C804.722 7.92141 808.473 11.2795 811.002 15.4285C813.519 19.5775 814.789 24.055 814.789 28.861C814.789 34.3362 813.289 39.203 810.276 43.4736C807.263 47.7443 803.198 51.1632 798.056 53.7305L817.693 87.0561H781.613L766.332 58.3297H750.469V87.0561H718.322L718.334 87.044ZM750.481 39.2882H773.034C775.551 39.2882 777.693 38.4365 779.435 36.7331C781.177 35.0297 782.048 32.7788 782.048 29.956C782.048 28.2161 781.661 26.6831 780.887 25.3568C780.113 24.0306 779.048 22.9721 777.681 22.1812C776.326 21.3904 774.777 21.001 773.022 21.001H750.469V39.276L750.481 39.2882Z" fill="white"/><path d="M831.956 87.044V1.49719H918.515V22.0109H864.104V33.8251H910.662V53.475H864.104V66.5303H919.531V87.044H831.956Z" fill="white"/><path d="M927.237 87.044L963.753 1.49719H1001.14L1037.66 87.044H1003.61L999.385 74.9864H964.322L960.099 87.044H927.225H927.237ZM971.025 55.8354H992.852L988.048 42.1596C987.661 41.1619 987.226 39.9695 986.742 38.5581C986.258 37.1468 985.774 35.6624 985.29 34.0806C984.806 32.5111 984.322 30.9537 983.838 29.4207C983.354 27.8876 982.918 26.5371 982.531 25.3812H981.37C980.982 26.8777 980.474 28.569 979.845 30.4792C979.216 32.3894 978.563 34.3605 977.885 36.3802C977.207 38.4121 976.53 40.3345 975.852 42.1596L971.049 55.8354H971.025Z" fill="white"/><path d="M1063.55 87.044V23.3736H1030.67V1.49719H1128.44V23.3736H1095.71V87.044H1063.56H1063.55Z" fill="white"/><path d="M1143.12 87.044V1.49719H1175.27V87.044H1143.12Z" fill="white"/><path d="M1224.01 87.0434L1188.51 1.49666H1222.85L1236.67 41.0397C1237.05 42.1226 1237.59 43.6921 1238.26 45.7605C1238.94 47.8289 1239.69 50.0312 1240.51 52.3551C1241.34 54.679 1242.04 56.7961 1242.62 58.6941H1243.78C1244.36 56.9542 1245.04 54.9588 1245.81 52.7201C1246.59 50.4814 1247.34 48.3034 1248.06 46.1864C1248.79 44.0693 1249.35 42.3537 1249.73 41.0275L1263.7 1.4845H1296.57L1261.22 87.0313H1223.97L1224.01 87.0434Z" fill="white"/><path d="M1310.43 87.044V1.49719H1396.98V22.0109H1342.57V33.8251H1389.13V53.475H1342.57V66.5303H1398V87.044H1310.43Z" fill="white"/></svg>
+      <span class="hero-tag">Investigación 2026</span>
+      <h1>Cuéntanos cómo tomas<br /><span>decisiones creativas</span></h1>
+      <p>Este cuestionario es anónimo y nos ayudará a diseñar un servicio realmente útil para empresas como la tuya.</p>
+      <p class="hero-meta">⏱ Tiempo estimado: 8–10 minutos</p>
+    </div>
+    <hr class="divider" />
+
+    <!-- FORM -->
+    <form id="mainForm" novalidate>
+
+      <!-- DATOS DE CONTACTO INICIALES -->
+      <div class="section" style="margin-bottom: 40px;">
+        <div class="question">
+          <div class="question-label">Nombre <span style="color:var(--yellow)">*</span></div>
+          <input type="text" class="text-input" id="contactNombre" placeholder="Tu nombre completo" />
+          <div class="field-error" id="nombre-error">Por favor ingresa tu nombre.</div>
+        </div>
+        <div class="question" style="margin-bottom: 0;">
+          <div class="question-label">Email o Instagram <span style="color:var(--yellow)">*</span></div>
+          <input type="text" class="text-input" id="contactEmail" placeholder="hola@tuempresa.com o @tuinstagram" />
+          <div class="field-error" id="email-error">Por favor ingresa tu email o Instagram.</div>
+        </div>
+      </div>
+      <hr class="divider" style="margin-bottom: 40px;" />
+
+      <!-- ══════════════════════════════════
+           SECCIÓN 1 · TU EMPRESA
+      ═══════════════════════════════════ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">1</div>
+          <div class="section-title">Tu empresa</div>
+        </div>
+
+        <!-- P1 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">1.</span> ¿Qué tipo de empresa diriges?</div>
+          <div class="options-list" id="q1-options">
+            <label class="option-item">
+              <input type="radio" name="q1" value="Restaurante / food service" />
+              <span class="option-text">Restaurante / food service</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Moda / textiles" />
+              <span class="option-text">Moda / textiles</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Retail / comercio" />
+              <span class="option-text">Retail / comercio</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Servicios profesionales (consultoría, legal, finanzas)" />
+              <span class="option-text">Servicios profesionales (consultoría, legal, finanzas)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Tecnología / startup" />
+              <span class="option-text">Tecnología / startup</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Salud / bienestar" />
+              <span class="option-text">Salud / bienestar</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Educación" />
+              <span class="option-text">Educación</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q1" value="Construcción / inmobiliaria" />
+              <span class="option-text">Construcción / inmobiliaria</span>
+            </label>
+            <label class="option-item" id="q1-otro-label">
+              <input type="radio" name="q1" value="Otro" />
+              <span class="option-text">Otro</span>
+            </label>
+          </div>
+          <div class="conditional" id="q1-otro-wrap">
+            <div class="otro-input-wrap">
+              <input type="text" class="text-input" id="q1-otro" placeholder="Describe tu tipo de empresa..." />
+            </div>
+          </div>
+          <div class="field-error" id="q1-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P2 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">2.</span> ¿Cuántas personas trabajan en tu empresa?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q2" value="1-10 personas" />
+              <span class="option-text">1–10 personas</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="11-50 personas" />
+              <span class="option-text">11–50 personas</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="51-200 personas" />
+              <span class="option-text">51–200 personas</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q2" value="Más de 200" />
+              <span class="option-text">Más de 200</span>
+            </label>
+          </div>
+          <div class="field-error" id="q2-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P3 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">3.</span> ¿Tienes un equipo o área dedicada a marketing o producción audiovisual?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q3" value="Sí, tenemos equipo interno" />
+              <span class="option-text">Sí, tenemos equipo interno</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="Una persona que maneja marketing entre otras funciones" />
+              <span class="option-text">Tenemos una persona que maneja marketing entre otras funciones</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="No tenemos, lo maneja dirección" />
+              <span class="option-text">No tenemos, lo maneja dirección</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q3" value="No tenemos, contratamos externos" />
+              <span class="option-text">No tenemos, contratamos externos</span>
+            </label>
+          </div>
+          <div class="field-error" id="q3-error">Por favor selecciona una opción.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══════════════════════════════════
+           SECCIÓN 2 · EXPERIENCIA CREATIVA
+      ═══════════════════════════════════ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">2</div>
+          <div class="section-title">Tu experiencia con servicios creativos</div>
+        </div>
+
+        <!-- P4 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">4.</span> ¿Has contratado servicios creativos o producción audiovisual en los últimos 2 años?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q4" value="Sí, con una agencia" />
+              <span class="option-text">Sí, con una agencia</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q4" value="Sí, con freelancers" />
+              <span class="option-text">Sí, con freelancers</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q4" value="Sí, con ambos" />
+              <span class="option-text">Sí, con ambos</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q4" value="No, lo hacemos internamente" />
+              <span class="option-text">No, lo hacemos internamente</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q4" value="No hemos contratado servicios creativos" />
+              <span class="option-text">No hemos contratado servicios creativos</span>
+            </label>
+          </div>
+          <div class="field-error" id="q4-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P5 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">5.</span> Si has contratado agencias o freelancers: ¿qué factor fue más importante al elegir?</div>
+          <div class="question-sub">Asigna un número del 1 al 5 a cada factor (1 = más importante, 5 = menos importante). Sin repetir números.</div>
+          <div class="ranking-grid">
+            <div class="ranking-row">
+              <span class="ranking-label">💰 Precio</span>
+              <select class="ranking-select" id="p5-precio" name="p5-precio">
+                <option value="">—</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div class="ranking-row">
+              <span class="ranking-label">⭐ Calidad del trabajo</span>
+              <select class="ranking-select" id="p5-calidad" name="p5-calidad">
+                <option value="">—</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div class="ranking-row">
+              <span class="ranking-label">⚡ Velocidad de entrega</span>
+              <select class="ranking-select" id="p5-velocidad" name="p5-velocidad">
+                <option value="">—</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div class="ranking-row">
+              <span class="ranking-label">🤝 Confianza / reputación</span>
+              <select class="ranking-select" id="p5-confianza" name="p5-confianza">
+                <option value="">—</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div class="ranking-row">
+              <span class="ranking-label">💬 Comunicación y proceso</span>
+              <select class="ranking-select" id="p5-comunicacion" name="p5-comunicacion">
+                <option value="">—</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-error" id="q5-error">Asigna un número diferente a cada factor.</div>
+        </div>
+
+        <!-- P6 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">6.</span> ¿Cuál ha sido tu mayor frustración al contratar servicios de producción audiovisual?</div>
+          <div class="question-sub">Marca todas las que apliquen.</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="checkbox" name="q6" value="Precios demasiado altos para mi presupuesto" />
+              <span class="option-text">Los precios son demasiado altos para mi presupuesto</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q6" value="Calidad no correspondió a lo que pagué" />
+              <span class="option-text">La calidad no correspondió a lo que pagué</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q6" value="Tiempos de entrega muy largos" />
+              <span class="option-text">Los tiempos de entrega fueron muy largos</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q6" value="Comunicación con el prestador fue difícil" />
+              <span class="option-text">La comunicación con el prestador fue difícil</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q6" value="No entendieron mi industria ni mi marca" />
+              <span class="option-text">No entendieron mi industria ni mi marca</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q6" value="No sabía qué pedir o cómo definir lo que necesitaba" />
+              <span class="option-text">No sabía qué pedir o cómo definir lo que necesitaba</span>
+            </label>
+            <label class="option-item" id="q6-otro-label">
+              <input type="checkbox" name="q6" value="Otro" id="q6-otro-check" />
+              <span class="option-text">Otro</span>
+            </label>
+          </div>
+          <div class="conditional" id="q6-otro-wrap">
+            <div class="otro-input-wrap">
+              <input type="text" class="text-input" id="q6-otro" placeholder="Describe tu frustración..." />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══════════════════════════════════
+           SECCIÓN 3 · PRESUPUESTO Y PRECIO
+      ═══════════════════════════════════ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">3</div>
+          <div class="section-title">Presupuesto y precio</div>
+        </div>
+
+        <!-- P7 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">7.</span> ¿Cuál es tu presupuesto mensual aproximado para servicios creativos / marketing / producción audiovisual?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q7" value="Menos de $200 USD/mes" />
+              <span class="option-text">Menos de $200 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="$200 - $500 USD/mes" />
+              <span class="option-text">$200 – $500 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="$500 - $1,000 USD/mes" />
+              <span class="option-text">$500 – $1,000 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="$1,000 - $2,500 USD/mes" />
+              <span class="option-text">$1,000 – $2,500 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="Más de $2,500 USD/mes" />
+              <span class="option-text">Más de $2,500 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q7" value="No tenemos presupuesto definido" />
+              <span class="option-text">No tenemos presupuesto definido</span>
+            </label>
+          </div>
+          <div class="field-error" id="q7-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P8 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">8.</span> Cuando recibes una propuesta creativa y ves el precio: ¿cuál es tu reacción más frecuente?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q8" value="Lo comparo con otras propuestas antes de decidir" />
+              <span class="option-text">Lo comparo con otras propuestas antes de decidir</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q8" value="Si supera mi presupuesto, descarto sin negociar" />
+              <span class="option-text">Si supera mi presupuesto, descarto sin negociar</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q8" value="Negocio siempre, sin importar el precio" />
+              <span class="option-text">Negocio siempre, sin importar el precio</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q8" value="Evalúo qué incluye antes de juzgar el precio" />
+              <span class="option-text">Evalúo qué incluye antes de juzgar el precio</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q8" value="El precio no es mi principal criterio" />
+              <span class="option-text">El precio no es mi principal criterio</span>
+            </label>
+          </div>
+          <div class="field-error" id="q8-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P9 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">9.</span> ¿Te ha pasado alguna vez: ver el portfolio o trabajo de una agencia que te encantó, pero no contratarla por precio?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q9" value="Sí, me ha pasado" id="q9-si" />
+              <span class="option-text">Sí, me ha pasado</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q9" value="No, normalmente encuentro opciones dentro de mi presupuesto" />
+              <span class="option-text">No, normalmente encuentro opciones dentro de mi presupuesto</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q9" value="No he tenido esa experiencia" />
+              <span class="option-text">No he tenido esa experiencia</span>
+            </label>
+          </div>
+          <div class="field-error" id="q9-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P10 (condicional a P9 = "Sí") -->
+        <div class="question conditional" id="q10-wrap">
+          <div class="question-label"><span class="q-num">10.</span> Si respondiste que sí: ¿cuánto era el precio que pedían vs lo que estabas dispuesto/a a pagar?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q10" value="Era el doble de lo que esperaba" />
+              <span class="option-text">Era el doble de lo que esperaba</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q10" value="Era 3 veces más o más" />
+              <span class="option-text">Era 3 veces más o más</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q10" value="Era menos de 50% más de lo que esperaba" />
+              <span class="option-text">Era menos de 50% más de lo que esperaba</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q10" value="Otro" id="q10-otro-radio" />
+              <span class="option-text">Otro</span>
+            </label>
+          </div>
+          <div class="conditional" id="q10-otro-wrap">
+            <div class="otro-input-wrap">
+              <input type="text" class="text-input" id="q10-otro" placeholder="Explícanos más..." />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══════════════════════════════════
+           SECCIÓN 4 · QUÉ NECESITAS
+      ═══════════════════════════════════ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">4</div>
+          <div class="section-title">Qué necesitas realmente</div>
+        </div>
+
+        <!-- P11 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">11.</span> ¿Qué tipo de servicios creativos necesitas con mayor frecuencia?</div>
+          <div class="question-sub">Marca todas las que apliquen.</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="checkbox" name="q11" value="Contenido para redes sociales (fotos, videos, gráficas)" />
+              <span class="option-text">Contenido para redes sociales (fotos, videos, gráficas)</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q11" value="Diseño gráfico puntual (flyers, banners, catálogos)" />
+              <span class="option-text">Diseño gráfico puntual (flyers, banners, catálogos)</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q11" value="Identidad visual / branding (logo, colores, tipografía)" />
+              <span class="option-text">Identidad visual / branding (logo, colores, tipografía)</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q11" value="Fotografía profesional de productos o servicios" />
+              <span class="option-text">Fotografía profesional de productos o servicios</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q11" value="Video profesional (reels, promocionales)" />
+              <span class="option-text">Video profesional (reels, promocionales)</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q11" value="Estrategia de marketing / comunicaciones" />
+              <span class="option-text">Estrategia de marketing / comunicaciones</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q11" value="Otro" id="q11-otro-check" />
+              <span class="option-text">Otro</span>
+            </label>
+          </div>
+          <div class="conditional" id="q11-otro-wrap">
+            <div class="otro-input-wrap">
+              <input type="text" class="text-input" id="q11-otro" placeholder="¿Qué otro servicio necesitas?" />
+            </div>
+          </div>
+        </div>
+
+        <!-- P12 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">12.</span> ¿Con qué frecuencia necesitas estos servicios?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q12" value="Eventualmente (1-2 veces al año)" />
+              <span class="option-text">Eventualmente (1 o 2 veces al año)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q12" value="Estacionalmente (cada 3-4 meses)" />
+              <span class="option-text">Estacionalmente (cada 3–4 meses)</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q12" value="Mensualmente" />
+              <span class="option-text">Mensualmente</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q12" value="Semanalmente o más" />
+              <span class="option-text">Semanalmente o más</span>
+            </label>
+          </div>
+          <div class="field-error" id="q12-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P13 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">13.</span> ¿Cuánto tiempo estás dispuesto/a a esperar por la entrega de un trabajo creativo puntual?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q13" value="24-48 horas" />
+              <span class="option-text">24–48 horas</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q13" value="3-5 días" />
+              <span class="option-text">3–5 días</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q13" value="1-2 semanas" />
+              <span class="option-text">1–2 semanas</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q13" value="Más de 2 semanas si la calidad lo justifica" />
+              <span class="option-text">Más de 2 semanas si la calidad lo justifica</span>
+            </label>
+          </div>
+          <div class="field-error" id="q13-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P14 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">14.</span> Cuando contratas un servicio creativo, ¿cómo prefieres trabajar?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q14" value="Doy el brief y espero el resultado final" />
+              <span class="option-text">Doy el brief y espero el resultado final</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q14" value="Me gusta estar involucrado con revisiones" />
+              <span class="option-text">Me gusta estar involucrado en el proceso con revisiones</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q14" value="Depende del tipo de proyecto" />
+              <span class="option-text">Depende del tipo de proyecto</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q14" value="No tengo preferencia clara" />
+              <span class="option-text">No tengo preferencia clara</span>
+            </label>
+          </div>
+          <div class="field-error" id="q14-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P15 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">15.</span> ¿Qué tipo de contenido estarías necesitando?</div>
+          <div class="question-sub">Marca todas las que apliquen.</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="checkbox" name="q15" value="Fotografías" />
+              <span class="option-text">Fotografías</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q15" value="Reels" />
+              <span class="option-text">Reels</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q15" value="Videos comerciales (inserts y tapas)" />
+              <span class="option-text">Videos comerciales (incluye inserts y tapas)</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q15" value="Todo lo anterior" />
+              <span class="option-text">Todo lo anterior</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- P16 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">16.</span> ¿Estarías dispuesto/a a pagar por servicios de contenido orgánico generado con teléfono?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q16" value="Sí, claro! Mientras sea contenido curado y atado a mi marca" />
+              <span class="option-text">Sí, claro — mientras sea contenido curado y atado a mi marca</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q16" value="Sí, podría pensarlo" />
+              <span class="option-text">Sí, podría pensarlo</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q16" value="Puede ser, dependiendo del portafolio" />
+              <span class="option-text">Puede ser, dependiendo del portafolio</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q16" value="Para nada" />
+              <span class="option-text">Para nada</span>
+            </label>
+          </div>
+          <div class="field-error" id="q16-error">Por favor selecciona una opción.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══════════════════════════════════
+           SECCIÓN 5 · REACCIÓN AL CONCEPTO
+      ═══════════════════════════════════ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">5</div>
+          <div class="section-title">Reacción al concepto</div>
+        </div>
+
+        <div class="concept-box">
+          <p>Las siguientes preguntas describen un servicio hipotético. Queremos tu opinión honesta — no hay respuestas correctas ni incorrectas.</p>
+        </div>
+
+        <!-- P17 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">17.</span> Imagina una plataforma donde puedes contratar talento creativo (diseñadores, fotógrafos, videomakers) seleccionado y supervisado por una agencia de branding reconocida, a precios de freelancer pero con estándares de agencia. ¿Qué tan interesante te parece esta propuesta?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q17" value="Muy interesante, lo contrataría hoy" />
+              <span class="option-text">Muy interesante, lo contrataría hoy</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q17" value="Interesante, dependería del precio y servicios" />
+              <span class="option-text">Interesante, dependería del precio y los servicios que ofrece</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q17" value="Neutral, no me genera entusiasmo ni rechazo" />
+              <span class="option-text">Neutral, no me genera entusiasmo ni rechazo</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q17" value="Poco interesante" />
+              <span class="option-text">Poco interesante</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q17" value="Nada interesante, prefiero otras opciones" />
+              <span class="option-text">Nada interesante, prefiero otras opciones</span>
+            </label>
+          </div>
+          <div class="field-error" id="q17-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P18 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">18.</span> En ese modelo, ¿qué te daría más confianza para contratar?</div>
+          <div class="question-sub">Elige máximo 2 opciones.</div>
+          <div class="options-list" id="q18-options">
+            <label class="option-item">
+              <input type="checkbox" name="q18" value="Ver el portfolio del talento disponible" />
+              <span class="option-text">Ver el portfolio del talento disponible</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q18" value="Agencia reconocida que supervisa y garantiza el resultado" />
+              <span class="option-text">Saber que una agencia reconocida los supervisa y garantiza el resultado</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q18" value="Precio fijo y claro por servicio, sin sorpresas" />
+              <span class="option-text">Precio fijo y claro por servicio, sin sorpresas</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q18" value="Tiempo de entrega garantizado" />
+              <span class="option-text">Tiempo de entrega garantizado</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q18" value="Posibilidad de empezar con un proyecto pequeño de prueba" />
+              <span class="option-text">Posibilidad de empezar con un proyecto pequeño de prueba</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="q18" value="Reviews de empresas similares a la mía" />
+              <span class="option-text">Reviews o testimonios de otras empresas similares a la mía</span>
+            </label>
+          </div>
+          <div class="field-error" id="q18-error">Selecciona máximo 2 opciones.</div>
+        </div>
+
+        <!-- P19 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">19.</span> ¿Qué precio mensual considerarías justo por acceso continuo a este tipo de servicio?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q19" value="Menos de $200 USD/mes" />
+              <span class="option-text">Menos de $200 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q19" value="$200 - $400 USD/mes" />
+              <span class="option-text">$200 – $400 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q19" value="$400 - $700 USD/mes" />
+              <span class="option-text">$400 – $700 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q19" value="$700 - $1,000 USD/mes" />
+              <span class="option-text">$700 – $1,000 USD/mes</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q19" value="Más de $1,000 USD/mes" />
+              <span class="option-text">Más de $1,000 USD/mes</span>
+            </label>
+          </div>
+          <div class="field-error" id="q19-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P20 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">20.</span> ¿Cuál sería tu mayor objeción para contratar este servicio?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q20" value="No confío en que el resultado sea tan bueno como la agencia directa" />
+              <span class="option-text">No confío en que el resultado sea tan bueno como trabajar directamente con la agencia</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q20" value="No tengo presupuesto mensual fijo" />
+              <span class="option-text">No tengo presupuesto mensual fijo</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q20" value="Ya tengo una solución que me funciona" />
+              <span class="option-text">Ya tengo una solución que me funciona</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q20" value="Prefiero contratar freelancers directamente" />
+              <span class="option-text">Prefiero contratar freelancers directamente sin intermediarios</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q20" value="Otra" id="q20-otra-radio" />
+              <span class="option-text">Otra</span>
+            </label>
+          </div>
+          <div class="conditional" id="q20-otro-wrap">
+            <div class="otro-input-wrap">
+              <input type="text" class="text-input" id="q20-otro" placeholder="¿Cuál es tu objeción?" />
+            </div>
+          </div>
+          <div class="field-error" id="q20-error">Por favor selecciona una opción.</div>
+        </div>
+
+        <!-- P21 -->
+        <div class="question">
+          <div class="question-label"><span class="q-num">21.</span> ¿Estarías dispuesto/a a tener una conversación de 20 minutos con nuestro equipo para contarnos más sobre tus necesidades?</div>
+          <div class="options-list">
+            <label class="option-item">
+              <input type="radio" name="q21" value="Sí, con gusto" id="q21-si" />
+              <span class="option-text">Sí, con gusto</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q21" value="Tal vez, depende de cómo se plantea" id="q21-talvez" />
+              <span class="option-text">Tal vez, depende de cómo se plantea</span>
+            </label>
+            <label class="option-item">
+              <input type="radio" name="q21" value="No por ahora" />
+              <span class="option-text">No por ahora</span>
+            </label>
+          </div>
+          <div class="field-error" id="q21-error">Por favor selecciona una opción.</div>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="submit-wrap">
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <div class="spinner"></div>
+          <span class="btn-text">Enviar respuestas →</span>
+        </button>
+        <div class="form-error" id="formError">
+          Hubo un error al enviar. Intenta nuevamente o escríbenos a <a href="mailto:andre@bananacreative.io">andre@bananacreative.io</a>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="successScreen">
+      <div class="check-icon">✓</div>
+      <h2>¡Muchas gracias!</h2>
+      <p>Tus respuestas nos ayudan a construir un servicio que realmente responda a lo que empresas como la tuya necesitan.</p>
+      <p style="margin-top: 16px; font-size: 13px; color: var(--gray-500);">
+        ¿Tienes preguntas? Escríbenos a <a href="mailto:andre@bananacreative.io" style="color:var(--yellow)">andre@bananacreative.io</a>
+      </p>
+    </div>
+
+    <div class="form-footer">
+      Un proyecto de <a href="https://bananacreative.io" target="_blank">Banana Creative</a> · Hackathon 2026
+    </div>
+
+  </div><!-- /container -->
+
+  <script>
+    // ─── CONFIG ───
+    // Token en variable de entorno Netlify
+    
+    
+
+    // ─── PROGRESS BAR ───
+    const requiredRadios = ['q1','q2','q3','q4','q7','q8','q9','q12','q13','q14','q16','q17','q19','q20','q21'];
+    const totalQuestions = 21;
+
+    function updateProgress() {
+      let answered = 0;
+      requiredRadios.forEach(name => {
+        if (document.querySelector(`input[name="${name}"]:checked`)) answered++;
+      });
+      // Check P5 ranking
+      const r5 = ['p5-precio','p5-calidad','p5-velocidad','p5-confianza','p5-comunicacion'];
+      if (r5.every(id => document.getElementById(id).value)) answered++;
+      // Check P6 (optional but count if any)
+      if (document.querySelectorAll('input[name="q6"]:checked').length > 0) answered++;
+      // Check P11
+      if (document.querySelectorAll('input[name="q11"]:checked').length > 0) answered++;
+      // Check P15
+      if (document.querySelectorAll('input[name="q15"]:checked').length > 0) answered++;
+      // Check P18
+      if (document.querySelectorAll('input[name="q18"]:checked').length > 0) answered++;
+
+      const pct = Math.min(100, Math.round((answered / totalQuestions) * 100));
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = answered + ' / ' + totalQuestions;
+    }
+
+    document.getElementById('mainForm').addEventListener('change', updateProgress);
+
+    // ─── OPTION ITEM HIGHLIGHT ───
+    document.querySelectorAll('.option-item').forEach(item => {
+      const input = item.querySelector('input');
+      if (!input) return;
+      input.addEventListener('change', () => {
+        if (input.type === 'radio') {
+          document.querySelectorAll(`input[name="${input.name}"]`).forEach(r => {
+            r.closest('.option-item').classList.remove('selected');
+          });
+        }
+        if (input.checked) item.classList.add('selected');
+        else item.classList.remove('selected');
+      });
+    });
+
+    // ─── CONDITIONAL: Q1 "Otro" ───
+    document.querySelectorAll('input[name="q1"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const wrap = document.getElementById('q1-otro-wrap');
+        wrap.classList.toggle('visible', r.value === 'Otro' && r.checked);
+      });
+    });
+
+    // ─── CONDITIONAL: Q6 "Otro" ───
+    document.getElementById('q6-otro-check').addEventListener('change', function() {
+      document.getElementById('q6-otro-wrap').classList.toggle('visible', this.checked);
+    });
+
+    // ─── CONDITIONAL: Q9 → Q10 ───
+    document.querySelectorAll('input[name="q9"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const wrap = document.getElementById('q10-wrap');
+        wrap.classList.toggle('visible', r.value === 'Sí, me ha pasado' && r.checked);
+      });
+    });
+
+    // ─── CONDITIONAL: Q10 "Otro" ───
+    document.getElementById('q10-otro-radio').addEventListener('change', function() {
+      document.getElementById('q10-otro-wrap').classList.toggle('visible', this.checked);
+    });
+    document.querySelectorAll('input[name="q10"]').forEach(r => {
+      r.addEventListener('change', () => {
+        if (r.value !== 'Otro') {
+          document.getElementById('q10-otro-wrap').classList.remove('visible');
+        }
+      });
+    });
+
+    // ─── CONDITIONAL: Q11 "Otro" ───
+    document.getElementById('q11-otro-check').addEventListener('change', function() {
+      document.getElementById('q11-otro-wrap').classList.toggle('visible', this.checked);
+    });
+
+    // ─── CONDITIONAL: Q20 "Otra" ───
+    document.querySelectorAll('input[name="q20"]').forEach(r => {
+      r.addEventListener('change', () => {
+        document.getElementById('q20-otro-wrap').classList.toggle('visible', r.value === 'Otra' && r.checked);
+      });
+    });
+
+
+    // ─── Q18: máximo 2 selecciones ───
+    document.querySelectorAll('input[name="q18"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const checked = document.querySelectorAll('input[name="q18"]:checked');
+        if (checked.length > 2) {
+          cb.checked = false;
+          cb.closest('.option-item').classList.remove('selected');
+          document.getElementById('q18-error').style.display = 'block';
+          setTimeout(() => { document.getElementById('q18-error').style.display = 'none'; }, 2000);
+        }
+      });
+    });
+
+    // ─── VALIDATION ───
+    function validateForm() {
+      let valid = true;
+
+      // Nombre y Email obligatorios
+      const nombre = document.getElementById('contactNombre').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      document.getElementById('nombre-error').style.display = nombre ? 'none' : 'block';
+      document.getElementById('email-error').style.display = email ? 'none' : 'block';
+      if (!nombre || !email) valid = false;
+
+      // Radios requeridos
+      const requiredFields = ['q1','q2','q3','q4','q7','q8','q9','q12','q13','q14','q16','q17','q19','q20','q21'];
+      requiredFields.forEach(name => {
+        const el = document.getElementById(name + '-error');
+        const checked = document.querySelector(`input[name="${name}"]:checked`);
+        if (!checked) {
+          if (el) { el.style.display = 'block'; }
+          valid = false;
+        } else {
+          if (el) el.style.display = 'none';
+        }
+      });
+
+      // P5 ranking — validar que todos estén llenos y sin repetición si alguno fue llenado
+      const r5ids = ['p5-precio','p5-calidad','p5-velocidad','p5-confianza','p5-comunicacion'];
+      const r5vals = r5ids.map(id => document.getElementById(id).value);
+      const r5filled = r5vals.filter(v => v !== '').length;
+      if (r5filled > 0) {
+        const nums = r5vals.filter(v => v !== '');
+        const unique = new Set(nums);
+        if (r5filled < 5 || unique.size !== nums.length) {
+          document.getElementById('q5-error').style.display = 'block';
+          valid = false;
+        } else {
+          document.getElementById('q5-error').style.display = 'none';
+        }
+      }
+
+      return valid;
+    }
+
+    // ─── COLLECT DATA ───
+    function collectData() {
+      const get = name => {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        return el ? el.value : null;
+      };
+      const getMulti = name => {
+        return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value);
+      };
+      const getNum = id => {
+        const v = document.getElementById(id).value;
+        return v ? parseInt(v) : null;
+      };
+      const getText = id => document.getElementById(id).value.trim() || null;
+
+      const fields = {
+        'Respuesta ID': 'RESP-' + Date.now(),
+        'Fecha de Envío': new Date().toISOString(),
+      };
+
+      // P1
+      const q1val = get('q1');
+      if (q1val) fields['P1 - Tipo de empresa'] = q1val;
+      const q1otro = getText('q1-otro');
+      if (q1otro) fields['P1 - Otro tipo de empresa'] = q1otro;
+
+      // P2
+      const q2val = get('q2');
+      if (q2val) fields['P2 - Tamaño de empresa'] = q2val;
+
+      // P3
+      const q3val = get('q3');
+      if (q3val) fields['P3 - Equipo de marketing'] = q3val;
+
+      // P4
+      const q4val = get('q4');
+      if (q4val) fields['P4 - Contrató servicios creativos'] = q4val;
+
+      // P5 rankings
+      const p5p = getNum('p5-precio');
+      if (p5p) fields['P5 - Ranking: Precio'] = p5p;
+      const p5c = getNum('p5-calidad');
+      if (p5c) fields['P5 - Ranking: Calidad'] = p5c;
+      const p5v = getNum('p5-velocidad');
+      if (p5v) fields['P5 - Ranking: Velocidad'] = p5v;
+      const p5conf = getNum('p5-confianza');
+      if (p5conf) fields['P5 - Ranking: Confianza/Reputación'] = p5conf;
+      const p5com = getNum('p5-comunicacion');
+      if (p5com) fields['P5 - Ranking: Comunicación'] = p5com;
+
+      // P6
+      const q6vals = getMulti('q6');
+      if (q6vals.length) fields['P6 - Frustraciones'] = q6vals;
+      const q6otro = getText('q6-otro');
+      if (q6otro) fields['P6 - Otra frustración'] = q6otro;
+
+      // P7
+      const q7val = get('q7');
+      if (q7val) fields['P7 - Presupuesto mensual'] = q7val;
+
+      // P8
+      const q8val = get('q8');
+      if (q8val) fields['P8 - Reacción al ver precio'] = q8val;
+
+      // P9
+      const q9val = get('q9');
+      if (q9val) fields['P9 - Portfolio bueno pero no contrató por precio'] = q9val;
+
+      // P10
+      const q10val = get('q10');
+      if (q10val) fields['P10 - Diferencia de precio'] = q10val;
+      const q10otro = getText('q10-otro');
+      if (q10otro) fields['P10 - Otro (diferencia precio)'] = q10otro;
+
+      // P11
+      const q11vals = getMulti('q11');
+      if (q11vals.length) fields['P11 - Servicios necesarios'] = q11vals;
+      const q11otro = getText('q11-otro');
+      if (q11otro) fields['P11 - Otro servicio'] = q11otro;
+
+      // P12
+      const q12val = get('q12');
+      if (q12val) fields['P12 - Frecuencia de servicios'] = q12val;
+
+      // P13
+      const q13val = get('q13');
+      if (q13val) fields['P13 - Tiempo de espera aceptable'] = q13val;
+
+      // P14
+      const q14val = get('q14');
+      if (q14val) fields['P14 - Preferencia de trabajo'] = q14val;
+
+      // P15
+      const q15vals = getMulti('q15');
+      if (q15vals.length) fields['P15 - Tipo de contenido'] = q15vals;
+
+      // P16
+      const q16val = get('q16');
+      if (q16val) fields['P16 - Contenido orgánico con teléfono'] = q16val;
+
+      // P17
+      const q17val = get('q17');
+      if (q17val) fields['P17 - Interés en la plataforma'] = q17val;
+
+      // P18
+      const q18vals = getMulti('q18');
+      if (q18vals.length) fields['P18 - Factores de confianza (máx 2)'] = q18vals;
+
+      // P19
+      const q19val = get('q19');
+      if (q19val) fields['P19 - Precio mensual justo'] = q19val;
+
+      // P20
+      const q20val = get('q20');
+      if (q20val) fields['P20 - Mayor objeción'] = q20val;
+      const q20otro = getText('q20-otro');
+      if (q20otro) fields['P20 - Otra objeción'] = q20otro;
+
+      // P21
+      const q21val = get('q21');
+      if (q21val) fields['P21 - Disponible para conversar'] = q21val;
+
+      // Contacto
+      const nombre = getText('contactNombre');
+      if (nombre) fields['Nombre'] = nombre;
+      const email = getText('contactEmail');
+      if (email) fields['Email o Instagram'] = email;
+
+      return fields;
+    }
+
+    // ─── SUBMIT ───
+    document.getElementById('mainForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!validateForm()) {
+        // Scroll to first error
+        const firstError = document.querySelector('.field-error[style*="block"]');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      const errBox = document.getElementById('formError');
+      btn.classList.add('loading');
+      btn.disabled = true;
+      errBox.style.display = 'none';
+
+      const fields = collectData();
+
+      try {
+        const res = await fetch('/.netlify/functions/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          console.error('Airtable error:', errData);
+          throw new Error(errData?.error?.message || 'Error al guardar');
+        }
+
+        // Mostrar pantalla de éxito
+        document.getElementById('mainForm').style.display = 'none';
+        document.querySelector('.hero').style.display = 'none';
+        document.querySelector('.divider').style.display = 'none';
+        document.getElementById('successScreen').style.display = 'block';
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressLabel').textContent = '✓ Enviado';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } catch (err) {
+        console.error(err);
+        errBox.style.display = 'block';
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    });
+
+    // Init progress
+    updateProgress();
+  </script>
+</body>
+</html>
