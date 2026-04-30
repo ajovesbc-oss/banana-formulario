@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red de Talentos · Banana Creative 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink: #FF4AB1;
+      --black: #0A0A0A;
+      --gray-900: #111111;
+      --gray-700: #2a2a2a;
+      --gray-500: #555555;
+      --gray-300: #cccccc;
+      --white: #ffffff;
+      --red: #e53e3e;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; line-height: 1.6; }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-wrap { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--gray-900); border-bottom: 1px solid var(--gray-700); }
+    .progress-inner { max-width: 720px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 14px; }
+    .progress-bar-track { flex: 1; height: 4px; background: var(--gray-700); border-radius: 99px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--pink); border-radius: 99px; transition: width 0.4s ease; width: 0%; }
+    .progress-label { font-size: 12px; color: var(--gray-300); white-space: nowrap; }
+
+    /* ─── LAYOUT ─── */
+    .container { max-width: 720px; margin: 0 auto; padding: 100px 24px 80px; }
+
+    /* ─── HERO ─── */
+    .hero { text-align: center; padding: 48px 0 48px; }
+    .hero-tag { display: inline-block; background: var(--pink); color: var(--black); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 14px; border-radius: 99px; margin-bottom: 20px; }
+    .hero h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+    .hero h1 span { color: var(--pink); }
+    .hero p { font-size: 15px; color: var(--gray-300); max-width: 500px; margin: 0 auto 10px; }
+    .hero-meta { font-size: 13px; color: var(--gray-500); }
+    .divider { border: none; border-top: 1px solid var(--gray-700); margin: 0 0 40px; }
+
+    /* ─── CONTACT TOP ─── */
+    .contact-top { background: var(--gray-900); border: 1.5px solid var(--gray-700); border-radius: var(--radius); padding: 24px; margin-bottom: 40px; display: flex; flex-direction: column; gap: 16px; }
+    .contact-top-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pink); margin-bottom: 4px; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-group label { font-size: 13px; color: var(--gray-300); }
+
+    /* ─── SECTIONS ─── */
+    .section { margin-bottom: 56px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+    .section-number { width: 36px; height: 36px; background: var(--pink); color: var(--black); font-weight: 800; font-size: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pink); }
+    .section-divider { border: none; border-top: 1px solid var(--gray-700); margin: 0 0 56px; }
+
+    /* ─── QUESTIONS ─── */
+    .question { margin-bottom: 32px; }
+    .question-label { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--white); line-height: 1.4; }
+    .question-label .q-num { color: var(--pink); font-weight: 700; margin-right: 4px; }
+    .question-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 12px; font-style: italic; }
+
+    /* ─── INPUTS ─── */
+    .text-input {
+      width: 100%; padding: 13px 16px;
+      background: var(--gray-700); border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius-sm); color: var(--white);
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      transition: border-color 0.15s; outline: none;
+    }
+    .text-input::placeholder { color: var(--gray-500); }
+    .text-input:focus { border-color: var(--pink); }
+
+    .textarea-input {
+      width: 100%; padding: 13px 16px;
+      background: var(--gray-700); border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius-sm); color: var(--white);
+      font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+      transition: border-color 0.15s; outline: none;
+      resize: vertical; min-height: 110px;
+    }
+    .textarea-input::placeholder { color: var(--gray-500); }
+    .textarea-input:focus { border-color: var(--pink); }
+
+    /* ─── RADIO / CHECKBOX ─── */
+    .options-list { display: flex; flex-direction: column; gap: 8px; }
+    .option-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px; border: 1.5px solid var(--gray-700);
+      border-radius: var(--radius-sm); cursor: pointer;
+      transition: border-color 0.15s, background 0.15s; user-select: none;
+    }
+    .option-item:hover { border-color: var(--pink); background: rgba(255,74,177,0.05); }
+    .option-item.selected { border-color: var(--pink); background: rgba(255,74,177,0.07); }
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      appearance: none; -webkit-appearance: none;
+      width: 18px; height: 18px; border: 2px solid var(--gray-500);
+      border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+      transition: all 0.15s; cursor: pointer; position: relative;
+    }
+    .option-item input[type="checkbox"] { border-radius: 5px; }
+    .option-item input[type="radio"]:checked,
+    .option-item input[type="checkbox"]:checked { background: var(--pink); border-color: var(--pink); }
+    .option-item input[type="radio"]:checked::after {
+      content: ''; position: absolute; width: 6px; height: 6px;
+      background: var(--black); border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+    }
+    .option-item input[type="checkbox"]:checked::after {
+      content: '✓'; position: absolute; font-size: 11px; font-weight: 700;
+      color: var(--black); top: 50%; left: 50%; transform: translate(-50%, -50%);
+    }
+    .option-text { font-size: 14px; color: var(--gray-300); line-height: 1.4; }
+
+    /* ─── CONDITIONAL ─── */
+    .conditional { display: none; margin-top: 8px; }
+    .conditional.visible { display: block; }
+
+    /* ─── FIELD ERROR ─── */
+    .field-error { color: var(--red); font-size: 12px; margin-top: 6px; display: none; }
+
+    /* ─── SUBMIT ─── */
+    .submit-wrap { margin-top: 48px; text-align: center; }
+    .btn-submit {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 18px 48px; background: var(--pink); color: var(--black);
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+      border: none; border-radius: var(--radius); cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s; letter-spacing: 0.02em;
+    }
+    .btn-submit:hover { transform: translateY(-2px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-submit .spinner { width: 18px; height: 18px; border: 2.5px solid var(--black); border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .form-error { background: rgba(229,62,62,0.1); border: 1px solid var(--red); color: #fc8181; padding: 14px 18px; border-radius: var(--radius-sm); font-size: 14px; margin-top: 16px; display: none; }
+
+    /* ─── SUCCESS ─── */
+    .success-screen { display: none; text-align: center; padding: 80px 0; }
+    .success-screen .check-icon { width: 72px; height: 72px; background: var(--pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 24px; }
+    .success-screen h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+    .success-screen p { font-size: 15px; color: var(--gray-300); max-width: 440px; margin: 0 auto; }
+
+    /* ─── FOOTER ─── */
+    .form-footer { text-align: center; padding: 24px 0 48px; font-size: 13px; color: var(--gray-500); }
+    .form-footer a { color: var(--pink); text-decoration: none; }
+
+    /* ─── MAX BADGE ─── */
+    .max-badge { display: inline-block; background: rgba(255,74,177,0.15); color: var(--pink); font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 99px; margin-left: 8px; vertical-align: middle; }
+
+    @media (max-width: 480px) {
+      .container { padding: 90px 16px 60px; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-wrap">
+    <div class="progress-inner">
+      <svg width="80" height="6" viewBox="0 0 1398 89" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M0 87.0559V2.15393H51.2525C56.9513 2.15393 61.8636 3.00563 66.0257 4.68468C70.1758 6.37591 73.3821 8.74849 75.6568 11.8024C77.9193 14.8564 79.0567 18.4822 79.0567 22.692C79.0567 25.9041 78.3791 28.885 77.024 31.5983C75.6689 34.3237 73.7935 36.5868 71.3736 38.3997C68.9538 40.2126 66.2072 41.5753 63.1219 42.4878V42.9867C66.5944 43.6437 69.7281 44.8482 72.5352 46.576C75.3301 48.3037 77.5806 50.6033 79.2623 53.4504C80.9441 56.2975 81.7911 59.7894 81.7911 63.9141C81.7911 69.4379 80.436 73.9032 77.7378 77.2857C75.0397 80.6681 71.4099 83.1502 66.8727 84.7076C62.3355 86.2772 57.1207 87.0559 51.2404 87.0559H0ZM13.7569 38.5335H48.6512C51.9301 38.5335 54.7855 37.9738 57.1933 36.8666C59.601 35.7473 61.5127 34.1899 62.9162 32.158C64.3197 30.1382 65.0215 27.8508 65.0215 25.2836C65.0215 20.8304 63.618 17.5453 60.8231 15.4404C58.0281 13.3355 54.3136 12.2891 49.6796 12.2891H13.7569V38.5335ZM13.7569 76.8963H51.1194C56.0438 76.8963 60.0487 75.8013 63.134 73.6112C66.2193 71.4211 67.768 67.771 67.768 62.6608C67.768 59.5217 67.0905 56.9058 65.7354 54.8009C64.3802 52.696 62.4081 51.1264 59.7946 50.0922C57.1933 49.058 53.9023 48.547 49.9458 48.547H13.7569V76.8842V76.8963Z" fill="white"/><path d="M89.6295 87.0559L128.867 2.15393H146.968L186.351 87.0559H171.433L161.729 66.019H113.368L103.81 87.0559H89.6174H89.6295ZM117.869 55.9933H157.107L145.093 29.3839C144.802 28.6417 144.367 27.6075 143.786 26.2934C143.205 24.9794 142.576 23.5072 141.898 21.9011C141.221 20.2951 140.543 18.6403 139.866 16.9491C139.188 15.2579 138.559 13.7127 137.978 12.3134H137.107C136.429 13.9682 135.655 15.8662 134.796 18.0076C133.925 20.1491 133.054 22.2418 132.195 24.2615C131.324 26.2813 130.598 27.9968 130.029 29.396L117.869 56.0054V55.9933Z" fill="white"/><path d="M199.805 87.0559V2.15393H213.126L261.342 58.0982C261.826 58.597 262.455 59.3392 263.229 60.3248C264.003 61.3103 264.778 62.2837 265.54 63.2327C266.314 64.1817 266.944 65.0334 267.428 65.7756H268.008V2.15393H281.475V87.0559H268.879L220.083 30.1261C219.406 29.2135 218.413 27.936 217.119 26.2934C215.812 24.6387 214.735 23.3247 213.864 22.3391H213.138V87.068H199.817L199.805 87.0559Z" fill="white"/><path d="M294.941 87.0559L334.179 2.15393H352.279L391.662 87.0559H376.744L367.04 66.019H318.68L309.121 87.0559H294.929H294.941ZM323.181 55.9933H362.419L350.404 29.3839C350.114 28.6417 349.678 27.6075 349.097 26.2934C348.516 24.9794 347.887 23.5072 347.21 21.9011C346.532 20.2951 345.855 18.6403 345.177 16.9491C344.5 15.2579 343.87 13.7127 343.29 12.3134H342.418C341.741 13.9682 340.967 15.8662 340.107 18.0076C339.236 20.1491 338.365 22.2418 337.506 24.2615C336.635 26.2813 335.909 27.9968 335.34 29.396L323.181 56.0054V55.9933Z" fill="white"/><path d="M405.12 87.0559V2.15393H418.441L466.657 58.0982C467.141 58.597 467.77 59.3392 468.544 60.3248C469.319 61.3103 470.093 62.2837 470.855 63.2327C471.63 64.1817 472.259 65.0334 472.743 65.7756H473.324V2.15393H486.79V87.0559H474.195L425.398 30.1261C424.721 29.2135 423.729 27.936 422.434 26.2934C421.127 24.6387 420.051 23.3247 419.179 22.3391H418.453V87.068H405.132L405.12 87.0559Z" fill="white"/><path d="M500.256 87.0559L539.494 2.15393H557.595L596.978 87.0559H582.059L572.356 66.019H523.995L514.437 87.0559H500.244H500.256ZM528.496 55.9933H567.734L555.719 29.3839C555.429 28.6417 554.993 27.6075 554.413 26.2934C553.832 24.9794 553.203 23.5072 552.525 21.9011C551.848 20.2951 551.17 18.6403 550.492 16.9491C549.815 15.2579 549.186 13.7127 548.605 12.3134H547.734C547.056 13.9682 546.282 15.8662 545.423 18.0076C544.552 20.1491 543.681 22.2418 542.821 24.2615C541.95 26.2813 541.224 27.9968 540.656 29.396L528.496 56.0054V55.9933Z" fill="white"/><path d="M652.861 88.5399C641.512 88.5399 631.99 86.8852 624.27 83.5635C616.563 80.2541 610.743 75.2899 606.811 68.7075C602.879 62.113 600.919 53.9732 600.919 44.276C600.919 29.6877 605.311 18.6643 614.083 11.1937C622.855 3.73529 635.777 0 652.849 0C662.54 0 671.01 1.38705 678.233 4.16114C685.456 6.93524 691.058 11.0599 695.039 16.5351C699.02 22.0103 701.004 28.7265 701.004 36.6838H670.308C670.308 33.3743 669.63 30.5029 668.275 28.106C666.92 25.6969 664.948 23.8353 662.383 22.5091C659.818 21.1829 656.587 20.5137 652.716 20.5137C648.154 20.5137 644.5 21.3411 641.729 22.9958C638.971 24.6505 636.95 26.9744 635.692 29.9554C634.434 32.9363 633.804 36.3796 633.804 40.2731V48.2303C633.804 52.1238 634.458 55.5671 635.765 58.548C637.071 61.5289 639.08 63.8529 641.802 65.5076C644.512 67.1623 648.057 67.9897 652.425 67.9897C656.793 67.9897 660.205 67.3692 662.976 66.1281C665.747 64.8871 667.828 63.0863 669.231 60.7138C670.635 58.3412 671.336 55.5549 671.336 52.3185H701.016C701.016 60.1176 699.128 66.7 695.341 72.09C691.554 77.48 686.073 81.5681 678.898 84.3422C671.724 87.1163 663.036 88.5034 652.861 88.5034V88.5399Z" fill="white"/><path d="M718.334 87.044V1.49719H781.032C788.497 1.49719 794.728 2.7869 799.725 5.35416C804.722 7.92141 808.473 11.2795 811.002 15.4285C813.519 19.5775 814.789 24.055 814.789 28.861C814.789 34.3362 813.289 39.203 810.276 43.4736C807.263 47.7443 803.198 51.1632 798.056 53.7305L817.693 87.0561H781.613L766.332 58.3297H750.469V87.0561H718.322L718.334 87.044ZM750.481 39.2882H773.034C775.551 39.2882 777.693 38.4365 779.435 36.7331C781.177 35.0297 782.048 32.7788 782.048 29.956C782.048 28.2161 781.661 26.6831 780.887 25.3568C780.113 24.0306 779.048 22.9721 777.681 22.1812C776.326 21.3904 774.777 21.001 773.022 21.001H750.469V39.276L750.481 39.2882Z" fill="white"/><path d="M831.956 87.044V1.49719H918.515V22.0109H864.104V33.8251H910.662V53.475H864.104V66.5303H919.531V87.044H831.956Z" fill="white"/><path d="M927.237 87.044L963.753 1.49719H1001.14L1037.66 87.044H1003.61L999.385 74.9864H964.322L960.099 87.044H927.225H927.237ZM971.025 55.8354H992.852L988.048 42.1596C987.661 41.1619 987.226 39.9695 986.742 38.5581C986.258 37.1468 985.774 35.6624 985.29 34.0806C984.806 32.5111 984.322 30.9537 983.838 29.4207C983.354 27.8876 982.918 26.5371 982.531 25.3812H981.37C980.982 26.8777 980.474 28.569 979.845 30.4792C979.216 32.3894 978.563 34.3605 977.885 36.3802C977.207 38.4121 976.53 40.3345 975.852 42.1596L971.049 55.8354H971.025Z" fill="white"/><path d="M1063.55 87.044V23.3736H1030.67V1.49719H1128.44V23.3736H1095.71V87.044H1063.56H1063.55Z" fill="white"/><path d="M1143.12 87.044V1.49719H1175.27V87.044H1143.12Z" fill="white"/><path d="M1224.01 87.0434L1188.51 1.49666H1222.85L1236.67 41.0397C1237.05 42.1226 1237.59 43.6921 1238.26 45.7605C1238.94 47.8289 1239.69 50.0312 1240.51 52.3551C1241.34 54.679 1242.04 56.7961 1242.62 58.6941H1243.78C1244.36 56.9542 1245.04 54.9588 1245.81 52.7201C1246.59 50.4814 1247.34 48.3034 1248.06 46.1864C1248.79 44.0693 1249.35 42.3537 1249.73 41.0275L1263.7 1.4845H1296.57L1261.22 87.0313H1223.97L1224.01 87.0434Z" fill="white"/><path d="M1310.43 87.044V1.49719H1396.98V22.0109H1342.57V33.8251H1389.13V53.475H1342.57V66.5303H1398V87.044H1310.43Z" fill="white"/></svg>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <span class="progress-label" id="progressLabel">0 / 21</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+      <svg width="160" height="10" viewBox="0 0 1398 89" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:24px;display:block;margin-left:auto;margin-right:auto"><path d="M0 87.0559V2.15393H51.2525C56.9513 2.15393 61.8636 3.00563 66.0257 4.68468C70.1758 6.37591 73.3821 8.74849 75.6568 11.8024C77.9193 14.8564 79.0567 18.4822 79.0567 22.692C79.0567 25.9041 78.3791 28.885 77.024 31.5983C75.6689 34.3237 73.7935 36.5868 71.3736 38.3997C68.9538 40.2126 66.2072 41.5753 63.1219 42.4878V42.9867C66.5944 43.6437 69.7281 44.8482 72.5352 46.576C75.3301 48.3037 77.5806 50.6033 79.2623 53.4504C80.9441 56.2975 81.7911 59.7894 81.7911 63.9141C81.7911 69.4379 80.436 73.9032 77.7378 77.2857C75.0397 80.6681 71.4099 83.1502 66.8727 84.7076C62.3355 86.2772 57.1207 87.0559 51.2404 87.0559H0ZM13.7569 38.5335H48.6512C51.9301 38.5335 54.7855 37.9738 57.1933 36.8666C59.601 35.7473 61.5127 34.1899 62.9162 32.158C64.3197 30.1382 65.0215 27.8508 65.0215 25.2836C65.0215 20.8304 63.618 17.5453 60.8231 15.4404C58.0281 13.3355 54.3136 12.2891 49.6796 12.2891H13.7569V38.5335ZM13.7569 76.8963H51.1194C56.0438 76.8963 60.0487 75.8013 63.134 73.6112C66.2193 71.4211 67.768 67.771 67.768 62.6608C67.768 59.5217 67.0905 56.9058 65.7354 54.8009C64.3802 52.696 62.4081 51.1264 59.7946 50.0922C57.1933 49.058 53.9023 48.547 49.9458 48.547H13.7569V76.8842V76.8963Z" fill="white"/><path d="M89.6295 87.0559L128.867 2.15393H146.968L186.351 87.0559H171.433L161.729 66.019H113.368L103.81 87.0559H89.6174H89.6295ZM117.869 55.9933H157.107L145.093 29.3839C144.802 28.6417 144.367 27.6075 143.786 26.2934C143.205 24.9794 142.576 23.5072 141.898 21.9011C141.221 20.2951 140.543 18.6403 139.866 16.9491C139.188 15.2579 138.559 13.7127 137.978 12.3134H137.107C136.429 13.9682 135.655 15.8662 134.796 18.0076C133.925 20.1491 133.054 22.2418 132.195 24.2615C131.324 26.2813 130.598 27.9968 130.029 29.396L117.869 56.0054V55.9933Z" fill="white"/><path d="M199.805 87.0559V2.15393H213.126L261.342 58.0982C261.826 58.597 262.455 59.3392 263.229 60.3248C264.003 61.3103 264.778 62.2837 265.54 63.2327C266.314 64.1817 266.944 65.0334 267.428 65.7756H268.008V2.15393H281.475V87.0559H268.879L220.083 30.1261C219.406 29.2135 218.413 27.936 217.119 26.2934C215.812 24.6387 214.735 23.3247 213.864 22.3391H213.138V87.068H199.817L199.805 87.0559Z" fill="white"/><path d="M294.941 87.0559L334.179 2.15393H352.279L391.662 87.0559H376.744L367.04 66.019H318.68L309.121 87.0559H294.929H294.941ZM323.181 55.9933H362.419L350.404 29.3839C350.114 28.6417 349.678 27.6075 349.097 26.2934C348.516 24.9794 347.887 23.5072 347.21 21.9011C346.532 20.2951 345.855 18.6403 345.177 16.9491C344.5 15.2579 343.87 13.7127 343.29 12.3134H342.418C341.741 13.9682 340.967 15.8662 340.107 18.0076C339.236 20.1491 338.365 22.2418 337.506 24.2615C336.635 26.2813 335.909 27.9968 335.34 29.396L323.181 56.0054V55.9933Z" fill="white"/><path d="M405.12 87.0559V2.15393H418.441L466.657 58.0982C467.141 58.597 467.77 59.3392 468.544 60.3248C469.319 61.3103 470.093 62.2837 470.855 63.2327C471.63 64.1817 472.259 65.0334 472.743 65.7756H473.324V2.15393H486.79V87.0559H474.195L425.398 30.1261C424.721 29.2135 423.729 27.936 422.434 26.2934C421.127 24.6387 420.051 23.3247 419.179 22.3391H418.453V87.068H405.132L405.12 87.0559Z" fill="white"/><path d="M500.256 87.0559L539.494 2.15393H557.595L596.978 87.0559H582.059L572.356 66.019H523.995L514.437 87.0559H500.244H500.256ZM528.496 55.9933H567.734L555.719 29.3839C555.429 28.6417 554.993 27.6075 554.413 26.2934C553.832 24.9794 553.203 23.5072 552.525 21.9011C551.848 20.2951 551.17 18.6403 550.492 16.9491C549.815 15.2579 549.186 13.7127 548.605 12.3134H547.734C547.056 13.9682 546.282 15.8662 545.423 18.0076C544.552 20.1491 543.681 22.2418 542.821 24.2615C541.95 26.2813 541.224 27.9968 540.656 29.396L528.496 56.0054V55.9933Z" fill="white"/><path d="M652.861 88.5399C641.512 88.5399 631.99 86.8852 624.27 83.5635C616.563 80.2541 610.743 75.2899 606.811 68.7075C602.879 62.113 600.919 53.9732 600.919 44.276C600.919 29.6877 605.311 18.6643 614.083 11.1937C622.855 3.73529 635.777 0 652.849 0C662.54 0 671.01 1.38705 678.233 4.16114C685.456 6.93524 691.058 11.0599 695.039 16.5351C699.02 22.0103 701.004 28.7265 701.004 36.6838H670.308C670.308 33.3743 669.63 30.5029 668.275 28.106C666.92 25.6969 664.948 23.8353 662.383 22.5091C659.818 21.1829 656.587 20.5137 652.716 20.5137C648.154 20.5137 644.5 21.3411 641.729 22.9958C638.971 24.6505 636.95 26.9744 635.692 29.9554C634.434 32.9363 633.804 36.3796 633.804 40.2731V48.2303C633.804 52.1238 634.458 55.5671 635.765 58.548C637.071 61.5289 639.08 63.8529 641.802 65.5076C644.512 67.1623 648.057 67.9897 652.425 67.9897C656.793 67.9897 660.205 67.3692 662.976 66.1281C665.747 64.8871 667.828 63.0863 669.231 60.7138C670.635 58.3412 671.336 55.5549 671.336 52.3185H701.016C701.016 60.1176 699.128 66.7 695.341 72.09C691.554 77.48 686.073 81.5681 678.898 84.3422C671.724 87.1163 663.036 88.5034 652.861 88.5034V88.5399Z" fill="white"/><path d="M718.334 87.044V1.49719H781.032C788.497 1.49719 794.728 2.7869 799.725 5.35416C804.722 7.92141 808.473 11.2795 811.002 15.4285C813.519 19.5775 814.789 24.055 814.789 28.861C814.789 34.3362 813.289 39.203 810.276 43.4736C807.263 47.7443 803.198 51.1632 798.056 53.7305L817.693 87.0561H781.613L766.332 58.3297H750.469V87.0561H718.322L718.334 87.044ZM750.481 39.2882H773.034C775.551 39.2882 777.693 38.4365 779.435 36.7331C781.177 35.0297 782.048 32.7788 782.048 29.956C782.048 28.2161 781.661 26.6831 780.887 25.3568C780.113 24.0306 779.048 22.9721 777.681 22.1812C776.326 21.3904 774.777 21.001 773.022 21.001H750.469V39.276L750.481 39.2882Z" fill="white"/><path d="M831.956 87.044V1.49719H918.515V22.0109H864.104V33.8251H910.662V53.475H864.104V66.5303H919.531V87.044H831.956Z" fill="white"/><path d="M927.237 87.044L963.753 1.49719H1001.14L1037.66 87.044H1003.61L999.385 74.9864H964.322L960.099 87.044H927.225H927.237ZM971.025 55.8354H992.852L988.048 42.1596C987.661 41.1619 987.226 39.9695 986.742 38.5581C986.258 37.1468 985.774 35.6624 985.29 34.0806C984.806 32.5111 984.322 30.9537 983.838 29.4207C983.354 27.8876 982.918 26.5371 982.531 25.3812H981.37C980.982 26.8777 980.474 28.569 979.845 30.4792C979.216 32.3894 978.563 34.3605 977.885 36.3802C977.207 38.4121 976.53 40.3345 975.852 42.1596L971.049 55.8354H971.025Z" fill="white"/><path d="M1063.55 87.044V23.3736H1030.67V1.49719H1128.44V23.3736H1095.71V87.044H1063.56H1063.55Z" fill="white"/><path d="M1143.12 87.044V1.49719H1175.27V87.044H1143.12Z" fill="white"/><path d="M1224.01 87.0434L1188.51 1.49666H1222.85L1236.67 41.0397C1237.05 42.1226 1237.59 43.6921 1238.26 45.7605C1238.94 47.8289 1239.69 50.0312 1240.51 52.3551C1241.34 54.679 1242.04 56.7961 1242.62 58.6941H1243.78C1244.36 56.9542 1245.04 54.9588 1245.81 52.7201C1246.59 50.4814 1247.34 48.3034 1248.06 46.1864C1248.79 44.0693 1249.35 42.3537 1249.73 41.0275L1263.7 1.4845H1296.57L1261.22 87.0313H1223.97L1224.01 87.0434Z" fill="white"/><path d="M1310.43 87.044V1.49719H1396.98V22.0109H1342.57V33.8251H1389.13V53.475H1342.57V66.5303H1398V87.044H1310.43Z" fill="white"/></svg>
+      <span class="hero-tag">Red de Talentos 2026</span>
+      <h1>Queremos conocer<br /><span>tu trabajo</span></h1>
+      <p>Estamos construyendo una red de talento creativo. Cuéntanos quién eres y cómo trabajas — sin filtros.</p>
+      <p class="hero-meta">⏱ 8–12 minutos · Vale la pena.</p>
+    </div>
+    <hr class="divider" />
+
+    <form id="mainForm" novalidate>
+
+      <!-- DATOS OBLIGATORIOS AL INICIO -->
+      <div class="contact-top">
+        <div class="contact-top-label">Datos de contacto</div>
+        <div class="input-group">
+          <label for="inputNombreApellido">Nombre y Apellido <span style="color:var(--pink)">*</span></label>
+          <input type="text" class="text-input" id="inputNombreApellido" placeholder="Tu nombre completo" />
+          <div class="field-error" id="nombre-apellido-error">Este campo es obligatorio.</div>
+        </div>
+        <div class="input-group">
+          <label for="inputCorreo">Correo electrónico <span style="color:var(--pink)">*</span></label>
+          <input type="email" class="text-input" id="inputCorreo" placeholder="hola@tucorreo.com" />
+          <div class="field-error" id="correo-error">Ingresa un correo válido.</div>
+        </div>
+      </div>
+
+      <!-- ══ SECCIÓN 1 ══ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">1</div>
+          <div class="section-title">Información básica</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">2.</span> ¿En qué ciudad y país estás basado/a?</div>
+          <input type="text" class="text-input" id="q2" placeholder="Ej: Bogotá, Colombia" />
+          <div class="field-error" id="q2-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">3.</span> ¿Cuál es tu rol o profesión creativa?</div>
+          <input type="text" class="text-input" id="q3" placeholder="Ej: Diseñador gráfico, Fotógrafo, Director de arte…" />
+          <div class="field-error" id="q3-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">4.</span> ¿Cuántos años llevas trabajando profesionalmente en esto?</div>
+          <div class="options-list">
+            <label class="option-item"><input type="radio" name="q4" value="Menos de 1 año" /><span class="option-text">Menos de 1 año</span></label>
+            <label class="option-item"><input type="radio" name="q4" value="1 a 3 años" /><span class="option-text">1 a 3 años</span></label>
+            <label class="option-item"><input type="radio" name="q4" value="3 a 6 años" /><span class="option-text">3 a 6 años</span></label>
+            <label class="option-item"><input type="radio" name="q4" value="6 a 10 años" /><span class="option-text">6 a 10 años</span></label>
+            <label class="option-item"><input type="radio" name="q4" value="Más de 10 años" /><span class="option-text">Más de 10 años</span></label>
+          </div>
+          <div class="field-error" id="q4-error">Selecciona una opción.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══ SECCIÓN 2 ══ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">2</div>
+          <div class="section-title">Perfil creativo</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">5.</span> ¿En qué áreas te especializas?</div>
+          <div class="question-sub">Selecciona todas las que apliquen.</div>
+          <div class="options-list">
+            <label class="option-item"><input type="checkbox" name="q5" value="Identidad de marca / Branding" /><span class="option-text">Identidad de marca / Branding</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Fotografía de producto" /><span class="option-text">Fotografía de producto</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Fotografía lifestyle / editorial" /><span class="option-text">Fotografía lifestyle / editorial</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Dirección de arte" /><span class="option-text">Dirección de arte</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Diseño editorial / impreso" /><span class="option-text">Diseño editorial / impreso</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Motion graphics / animación" /><span class="option-text">Motion graphics / animación</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Contenido para redes sociales" /><span class="option-text">Contenido para redes sociales</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Video / producción audiovisual" /><span class="option-text">Video / producción audiovisual</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Ilustración" /><span class="option-text">Ilustración</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="UX/UI / Diseño digital" /><span class="option-text">UX/UI / Diseño digital</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Retoque / postproducción" /><span class="option-text">Retoque / postproducción</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Dirección creativa" /><span class="option-text">Dirección creativa</span></label>
+            <label class="option-item"><input type="checkbox" name="q5" value="Otro" id="q5-otro-check" /><span class="option-text">Otro</span></label>
+          </div>
+          <div class="conditional" id="q5-otro-wrap">
+            <input type="text" class="text-input" id="q5-otro" placeholder="¿Cuál?" style="margin-top:8px" />
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">6.</span> ¿Cómo describirías tu estilo o enfoque creativo?</div>
+          <div class="question-sub">No uses adjetivos vacíos. Cuéntanos qué te hace diferente.</div>
+          <textarea class="textarea-input" id="q6" placeholder="Describe tu enfoque creativo..."></textarea>
+          <div class="field-error" id="q6-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">7.</span> Comparte tus links de portafolio, redes o trabajo</div>
+          <div class="question-sub">Behance, Instagram, web personal, Vimeo… Un link por línea.</div>
+          <textarea class="textarea-input" id="q7" placeholder="https://...&#10;https://..."></textarea>
+          <div class="field-error" id="q7-error">Comparte al menos un link.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══ SECCIÓN 3 ══ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">3</div>
+          <div class="section-title">Forma de trabajar</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">8.</span> ¿Cómo sueles trabajar?</div>
+          <div class="options-list">
+            <label class="option-item"><input type="radio" name="q8" value="Solo/a siempre" /><span class="option-text">Solo/a siempre</span></label>
+            <label class="option-item"><input type="radio" name="q8" value="Solo/a, pero colaboro con otros cuando el proyecto lo requiere" /><span class="option-text">Solo/a, pero colaboro con otros cuando el proyecto lo requiere</span></label>
+            <label class="option-item"><input type="radio" name="q8" value="Tengo un equipo fijo pequeño" /><span class="option-text">Tengo un equipo fijo pequeño</span></label>
+            <label class="option-item"><input type="radio" name="q8" value="Dirijo un equipo o estudio" /><span class="option-text">Dirijo un equipo o estudio</span></label>
+            <label class="option-item"><input type="radio" name="q8" value="Depende del proyecto" /><span class="option-text">Depende del proyecto</span></label>
+          </div>
+          <div class="field-error" id="q8-error">Selecciona una opción.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">9.</span> ¿Qué tipo de proyectos prefieres? <span class="max-badge">Máx. 3</span></div>
+          <div class="options-list" id="q9-options">
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos de largo aliento (campañas, lanzamientos)" /><span class="option-text">Proyectos de largo aliento (campañas, lanzamientos)</span></label>
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos cortos y concretos" /><span class="option-text">Proyectos cortos y concretos</span></label>
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos recurrentes con un mismo cliente" /><span class="option-text">Proyectos recurrentes con un mismo cliente</span></label>
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos únicos con brief abierto" /><span class="option-text">Proyectos únicos con brief abierto</span></label>
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos de alta producción" /><span class="option-text">Proyectos de alta producción</span></label>
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos con presupuesto ajustado pero buena idea" /><span class="option-text">Proyectos con presupuesto ajustado pero buena idea</span></label>
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos donde tengo autonomía creativa total" /><span class="option-text">Proyectos donde tengo autonomía creativa total</span></label>
+            <label class="option-item"><input type="checkbox" name="q9" value="Proyectos con dirección clara del cliente" /><span class="option-text">Proyectos con dirección clara del cliente</span></label>
+          </div>
+          <div class="field-error" id="q9-error">Selecciona máximo 3 opciones.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">10.</span> Descríbenos brevemente tu proceso creativo: ¿cómo vas de un brief a una entrega?</div>
+          <div class="question-sub">Sin tecnicismos. Cuéntanoslo como lo explicarías a un cliente nuevo.</div>
+          <textarea class="textarea-input" id="q10" placeholder="Mi proceso empieza por..."></textarea>
+          <div class="field-error" id="q10-error">Este campo es obligatorio.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══ SECCIÓN 4 ══ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">4</div>
+          <div class="section-title">Experiencia con clientes</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">11.</span> ¿Con qué tipo de clientes has trabajado principalmente?</div>
+          <div class="question-sub">Selecciona todas las que apliquen.</div>
+          <div class="options-list">
+            <label class="option-item"><input type="checkbox" name="q11" value="Marcas grandes / corporativos" /><span class="option-text">Marcas grandes / corporativos</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Pymes y negocios pequeños" /><span class="option-text">Pymes y negocios pequeños</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Startups" /><span class="option-text">Startups</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Agencias de publicidad o diseño" /><span class="option-text">Agencias de publicidad o diseño</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Proyectos personales / propios" /><span class="option-text">Proyectos personales / propios</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="ONGs o proyectos sociales" /><span class="option-text">ONGs o proyectos sociales</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Clientes internacionales" /><span class="option-text">Clientes internacionales</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Industria de moda / belleza" /><span class="option-text">Industria de moda / belleza</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Gastronomía / alimentos" /><span class="option-text">Gastronomía / alimentos</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Inmobiliaria / arquitectura" /><span class="option-text">Inmobiliaria / arquitectura</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Tecnología" /><span class="option-text">Tecnología</span></label>
+            <label class="option-item"><input type="checkbox" name="q11" value="Otro" id="q11-otro-check" /><span class="option-text">Otro</span></label>
+          </div>
+          <div class="conditional" id="q11-otro-wrap">
+            <input type="text" class="text-input" id="q11-otro" placeholder="¿Qué otro tipo?" style="margin-top:8px" />
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">12.</span> Cuéntanos sobre un proyecto del que estés orgulloso/a. ¿Cuál era el reto y qué hiciste?</div>
+          <div class="question-sub">No tienes que nombrar al cliente si prefieres no hacerlo. Nos interesa tu rol y lo que resolviste.</div>
+          <textarea class="textarea-input" id="q12" placeholder="El proyecto era..."></textarea>
+          <div class="field-error" id="q12-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">13.</span> ¿Qué valor concreto crees que aportas a un cliente?</div>
+          <div class="question-sub">¿Qué te contrata alguien realmente cuando te contrata a ti?</div>
+          <textarea class="textarea-input" id="q13" placeholder="Lo que realmente ofrezco es..."></textarea>
+          <div class="field-error" id="q13-error">Este campo es obligatorio.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══ SECCIÓN 5 ══ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">5</div>
+          <div class="section-title">Operativo</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">14.</span> ¿Cuál es tu rango de tarifa habitual por proyecto o por día?</div>
+          <div class="options-list">
+            <label class="option-item"><input type="radio" name="q14" value="Menos de $500 USD por proyecto" /><span class="option-text">Menos de $500 USD por proyecto</span></label>
+            <label class="option-item"><input type="radio" name="q14" value="$500 – $1,500 USD por proyecto" /><span class="option-text">$500 – $1,500 USD por proyecto</span></label>
+            <label class="option-item"><input type="radio" name="q14" value="$1,500 – $3,000 USD por proyecto" /><span class="option-text">$1,500 – $3,000 USD por proyecto</span></label>
+            <label class="option-item"><input type="radio" name="q14" value="$3,000 – $6,000 USD por proyecto" /><span class="option-text">$3,000 – $6,000 USD por proyecto</span></label>
+            <label class="option-item"><input type="radio" name="q14" value="Más de $6,000 USD por proyecto" /><span class="option-text">Más de $6,000 USD por proyecto</span></label>
+            <label class="option-item"><input type="radio" name="q14" value="Trabajo por tarifa diaria o por hora" /><span class="option-text">Trabajo por tarifa diaria o por hora</span></label>
+            <label class="option-item"><input type="radio" name="q14" value="Varía mucho según el proyecto" /><span class="option-text">Varía mucho según el proyecto</span></label>
+          </div>
+          <div class="field-error" id="q14-error">Selecciona una opción.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">14b.</span> Si quieres agregar contexto sobre tu estructura de precios, hazlo aquí <span style="color:var(--gray-500);font-weight:400;font-size:13px">(opcional)</span></div>
+          <textarea class="textarea-input" id="q14b" placeholder="Ej: Cobro por hora para proyectos cortos, por proyecto para campañas..." style="min-height:80px"></textarea>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">15.</span> ¿Cómo estructuras normalmente tus entregas?</div>
+          <textarea class="textarea-input" id="q15" placeholder="Ej: Entrego por fases, con revisiones incluidas… / Entrego un paquete final con X rondas de cambios…"></textarea>
+          <div class="field-error" id="q15-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">16.</span> ¿Cuáles son tus tiempos promedio de entrega según tipo de proyecto?</div>
+          <div class="question-sub">Ej: sesión fotográfica / identidad visual / campaña de contenido. No necesitas cubrirlos todos.</div>
+          <textarea class="textarea-input" id="q16" placeholder="Sesión fotográfica: 3-5 días de edición..."></textarea>
+          <div class="field-error" id="q16-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">17.</span> ¿Cuál es tu disponibilidad actual?</div>
+          <div class="options-list">
+            <label class="option-item"><input type="radio" name="q17" value="Disponible full time para nuevos proyectos" /><span class="option-text">Disponible full time para nuevos proyectos</span></label>
+            <label class="option-item"><input type="radio" name="q17" value="Disponible freelance con capacidad parcial" /><span class="option-text">Disponible freelance con capacidad parcial</span></label>
+            <label class="option-item"><input type="radio" name="q17" value="Disponibilidad limitada (1 a 2 proyectos simultáneos máximo)" /><span class="option-text">Disponibilidad limitada (1 a 2 proyectos simultáneos máximo)</span></label>
+            <label class="option-item"><input type="radio" name="q17" value="No disponible por ahora, pero me interesa el futuro" /><span class="option-text">No disponible por ahora, pero me interesa el futuro</span></label>
+            <label class="option-item"><input type="radio" name="q17" value="Depende del proyecto y el cliente" /><span class="option-text">Depende del proyecto y el cliente</span></label>
+          </div>
+          <div class="field-error" id="q17-error">Selecciona una opción.</div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- ══ SECCIÓN 6 ══ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">6</div>
+          <div class="section-title">Mentalidad y fit</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">18.</span> ¿Qué buscas en los proyectos en los que decides participar?</div>
+          <div class="question-sub">Sé honesto/a. Nos interesa saber qué te hace decir que sí.</div>
+          <textarea class="textarea-input" id="q18" placeholder="Digo que sí cuando..."></textarea>
+          <div class="field-error" id="q18-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">19.</span> ¿Te interesa ser parte de una red que conecta creativos con clientes de forma activa?</div>
+          <div class="options-list">
+            <label class="option-item"><input type="radio" name="q19" value="Sí, es justo lo que busco" /><span class="option-text">Sí, es justo lo que busco</span></label>
+            <label class="option-item"><input type="radio" name="q19" value="Sí, aunque depende de cómo funcione" /><span class="option-text">Sí, aunque depende de cómo funcione</span></label>
+            <label class="option-item"><input type="radio" name="q19" value="Tengo curiosidad, pero quiero saber más antes" /><span class="option-text">Tengo curiosidad, pero quiero saber más antes</span></label>
+            <label class="option-item"><input type="radio" name="q19" value="No por ahora, pero me interesa seguir en contacto" /><span class="option-text">No por ahora, pero me interesa seguir en contacto</span></label>
+          </div>
+          <div class="field-error" id="q19-error">Selecciona una opción.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">20.</span> ¿Qué esperarías de ese tipo de colaboración para que valga la pena para ti?</div>
+          <div class="question-sub">¿Qué tendría que tener para que digas que sí sin dudarlo?</div>
+          <textarea class="textarea-input" id="q20" placeholder="Para mí sería clave que..."></textarea>
+          <div class="field-error" id="q20-error">Este campo es obligatorio.</div>
+        </div>
+
+        <div class="question">
+          <div class="question-label"><span class="q-num">21.</span> ¿Hay algo más que quieras contarnos sobre ti o tu trabajo? <span style="color:var(--gray-500);font-weight:400;font-size:13px">(opcional)</span></div>
+          <textarea class="textarea-input" id="q21" placeholder="Algo que no preguntamos y que crees que deberíamos saber..." style="min-height:80px"></textarea>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="submit-wrap">
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <div class="spinner"></div>
+          <span class="btn-text">Enviar postulación →</span>
+        </button>
+        <div class="form-error" id="formError">
+          Hubo un error al enviar. Intenta nuevamente o escríbenos a <a href="mailto:andre@bananacreative.io" style="color:var(--pink)">andre@bananacreative.io</a>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="successScreen">
+      <div class="check-icon">✓</div>
+      <h2>¡Gracias por tu tiempo!</h2>
+      <p>Revisamos cada respuesta con atención. Si hay fit, nos ponemos en contacto.</p>
+      <p style="margin-top:16px;font-size:13px;color:var(--gray-500)">Mientras tanto: sigue haciendo lo que haces.</p>
+    </div>
+
+    <div class="form-footer">
+      Un proyecto de <a href="https://bananacreative.io" target="_blank">Banana Creative</a> · Red de Talentos 2026
+    </div>
+  </div>
+
+  <script>
+    // ─── PROGRESS ───
+    const totalQ = 21;
+    function updateProgress() {
+      let n = 0;
+      if (document.getElementById('inputNombreApellido').value.trim()) n++;
+      if (document.getElementById('inputCorreo').value.trim()) n++;
+      ['q2','q3'].forEach(id => { if (document.getElementById(id).value.trim()) n++; });
+      if (document.querySelector('input[name="q4"]:checked')) n++;
+      if (document.querySelectorAll('input[name="q5"]:checked').length) n++;
+      ['q6','q7','q10','q12','q13','q15','q16','q18','q20'].forEach(id => { if (document.getElementById(id).value.trim()) n++; });
+      if (document.querySelector('input[name="q8"]:checked')) n++;
+      if (document.querySelectorAll('input[name="q9"]:checked').length) n++;
+      if (document.querySelectorAll('input[name="q11"]:checked').length) n++;
+      if (document.querySelector('input[name="q14"]:checked')) n++;
+      if (document.querySelector('input[name="q17"]:checked')) n++;
+      if (document.querySelector('input[name="q19"]:checked')) n++;
+      const pct = Math.min(100, Math.round((n / totalQ) * 100));
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = n + ' / ' + totalQ;
+    }
+    document.getElementById('mainForm').addEventListener('input', updateProgress);
+    document.getElementById('mainForm').addEventListener('change', updateProgress);
+
+    // ─── HIGHLIGHT SELECTED ───
+    document.querySelectorAll('.option-item').forEach(item => {
+      const inp = item.querySelector('input');
+      if (!inp) return;
+      inp.addEventListener('change', () => {
+        if (inp.type === 'radio') {
+          document.querySelectorAll(`input[name="${inp.name}"]`).forEach(r => r.closest('.option-item').classList.remove('selected'));
+        }
+        item.classList.toggle('selected', inp.checked);
+      });
+    });
+
+    // ─── CONDITIONAL: Q5 Otro ───
+    document.getElementById('q5-otro-check').addEventListener('change', function() {
+      document.getElementById('q5-otro-wrap').classList.toggle('visible', this.checked);
+    });
+
+    // ─── CONDITIONAL: Q11 Otro ───
+    document.getElementById('q11-otro-check').addEventListener('change', function() {
+      document.getElementById('q11-otro-wrap').classList.toggle('visible', this.checked);
+    });
+
+    // ─── Q9: máximo 3 ───
+    document.querySelectorAll('input[name="q9"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const checked = document.querySelectorAll('input[name="q9"]:checked');
+        if (checked.length > 3) {
+          cb.checked = false;
+          cb.closest('.option-item').classList.remove('selected');
+          document.getElementById('q9-error').textContent = 'Máximo 3 opciones.';
+          document.getElementById('q9-error').style.display = 'block';
+          setTimeout(() => { document.getElementById('q9-error').style.display = 'none'; }, 2000);
+        }
+      });
+    });
+
+    // ─── VALIDATION ───
+    function validateForm() {
+      let valid = true;
+      const show = (id, msg) => { const el = document.getElementById(id); if(el){ el.textContent = msg||el.textContent; el.style.display = 'block'; } };
+      const hide = (id) => { const el = document.getElementById(id); if(el) el.style.display = 'none'; };
+
+      // Contacto
+      const nombre = document.getElementById('inputNombreApellido').value.trim();
+      const correo = document.getElementById('inputCorreo').value.trim();
+      if (!nombre) { show('nombre-apellido-error'); valid = false; } else hide('nombre-apellido-error');
+      if (!correo || !correo.includes('@')) { show('correo-error'); valid = false; } else hide('correo-error');
+
+      // Textos obligatorios
+      const textos = [['q2','q2-error'],['q3','q3-error'],['q6','q6-error'],['q7','q7-error'],['q10','q10-error'],['q12','q12-error'],['q13','q13-error'],['q15','q15-error'],['q16','q16-error'],['q18','q18-error'],['q20','q20-error']];
+      textos.forEach(([id, errId]) => {
+        if (!document.getElementById(id).value.trim()) { show(errId); valid = false; } else hide(errId);
+      });
+
+      // Radios obligatorios
+      const radios = [['q4','q4-error'],['q8','q8-error'],['q14','q14-error'],['q17','q17-error'],['q19','q19-error']];
+      radios.forEach(([name, errId]) => {
+        if (!document.querySelector(`input[name="${name}"]:checked`)) { show(errId); valid = false; } else hide(errId);
+      });
+
+      return valid;
+    }
+
+    // ─── COLLECT DATA ───
+    function collectData() {
+      const txt = id => document.getElementById(id).value.trim() || null;
+      const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
+      const multi = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e => e.value);
+
+      const fields = {
+        'Fecha de Envío': new Date().toISOString(),
+        'Nombre y Apellido': txt('inputNombreApellido'),
+        'Correo': txt('inputCorreo'),
+        'S1 - Ciudad y país': txt('q2'),
+        'S1 - Rol o profesión creativa': txt('q3'),
+        'S1 - Años de experiencia': radio('q4'),
+        'S2 - Estilo o enfoque creativo': txt('q6'),
+        'S2 - Links de portafolio': txt('q7'),
+        'S3 - Forma de trabajar': radio('q8'),
+        'S3 - Proceso creativo': txt('q10'),
+        'S4 - Proyecto del que está orgulloso/a': txt('q12'),
+        'S4 - Valor concreto que aporta': txt('q13'),
+        'S5 - Rango de tarifa': radio('q14'),
+        'S5 - Contexto de precios': txt('q14b'),
+        'S5 - Estructura de entregas': txt('q15'),
+        'S5 - Tiempos promedio de entrega': txt('q16'),
+        'S5 - Disponibilidad actual': radio('q17'),
+        'S6 - Qué busca en proyectos': txt('q18'),
+        'S6 - Interés en la red': radio('q19'),
+        'S6 - Qué esperaría de la colaboración': txt('q20'),
+        'S6 - Información adicional': txt('q21'),
+      };
+
+      const areas = multi('q5');
+      if (areas.length) fields['S2 - Áreas de especialización'] = areas;
+      const otraArea = txt('q5-otro');
+      if (otraArea) fields['S2 - Otra área'] = otraArea;
+
+      const proyectos = multi('q9');
+      if (proyectos.length) fields['S3 - Tipo de proyectos preferidos'] = proyectos;
+
+      const clientes = multi('q11');
+      if (clientes.length) fields['S4 - Tipo de clientes'] = clientes;
+      const otroCliente = txt('q11-otro');
+      if (otroCliente) fields['S4 - Otro tipo de cliente'] = otroCliente;
+
+      // Limpiar nulls
+      Object.keys(fields).forEach(k => { if (fields[k] === null) delete fields[k]; });
+      return fields;
+    }
+
+    // ─── SUBMIT ───
+    document.getElementById('mainForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (!validateForm()) {
+        const firstErr = document.querySelector('.field-error[style*="block"]');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      const btn = document.getElementById('submitBtn');
+      const errBox = document.getElementById('formError');
+      btn.classList.add('loading'); btn.disabled = true; errBox.style.display = 'none';
+
+      try {
+        const res = await fetch('/.netlify/functions/submit-talentos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: collectData() })
+        });
+        if (!res.ok) throw new Error('Error ' + res.status);
+        document.getElementById('mainForm').style.display = 'none';
+        document.querySelector('.hero').style.display = 'none';
+        document.querySelector('.divider').style.display = 'none';
+        document.querySelector('.contact-top').style.display = 'none';
+        document.getElementById('successScreen').style.display = 'block';
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressLabel').textContent = '✓ Enviado';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        errBox.style.display = 'block';
+        btn.classList.remove('loading'); btn.disabled = false;
+      }
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
